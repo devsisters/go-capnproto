@@ -10,6 +10,8 @@ import (
 // producing functions. Initially adapted from the WriteJSON implementation.
 
 func (n *node) defineTypeCaplitFuncs(w io.Writer) {
+	return
+
 	g_imported["io"] = true
 	g_imported["bufio"] = true
 	g_imported["bytes"] = true

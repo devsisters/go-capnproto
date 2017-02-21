@@ -774,6 +774,10 @@ func (n *node) defineStructFuncs(w io.Writer) {
 // The value will be in scope as s. Some features need to redefine s, like unions.
 // In that case, Make a new block and redeclare s
 func (n *node) defineTypeJsonFuncs(w io.Writer) {
+	if disable, err := strconv.ParseBool(os.Getenv("GO_CAPNP_JSON_DISABLE")); err == nil && disable {
+		return
+	}
+
 	if C.JSON_enabled {
 		g_imported["io"] = true
 		g_imported["bufio"] = true
