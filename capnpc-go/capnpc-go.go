@@ -774,7 +774,7 @@ func (n *node) defineStructFuncs(w io.Writer) {
 // The value will be in scope as s. Some features need to redefine s, like unions.
 // In that case, Make a new block and redeclare s
 func (n *node) defineTypeJsonFuncs(w io.Writer) {
-	if disable, err := strconv.ParseBool(os.Getenv("GO_CAPNP_JSON_DISABLE")); err == nil && disable {
+	if disabledJSON {
 		return
 	}
 
@@ -823,19 +823,28 @@ func (n *node) jsonEnum(w io.Writer) {
 func (n *node) jsonStruct(w io.Writer) {
 	fprintf(w, `err = b.WriteByte('{');`)
 	writeErrCheck(w)
-	for i, f := range n.codeOrderFields() {
+	isFirstField := true
+
+	for _, f := range n.codeOrderFields() {
+		if ignorePrivateInfoField && privateInfoField[f.Name()] {
+			continue
+		}
+
 		if f.DiscriminantValue() != 0xFFFF {
 			enumname := fmt.Sprintf("%s_%s", strings.ToUpper(n.name), strings.ToUpper(f.Name()))
 			fprintf(w, "if s.Which() == %s {", enumname)
-		} else if i != 0 {
+		} else if !isFirstField {
 			fprintf(w, `
 				err = b.WriteByte(',');
 			`)
 			writeErrCheck(w)
 		}
+
 		fprintf(w, `_, err = b.WriteString("\"%s\":");`, f.Name())
 		writeErrCheck(w)
 		f.json(w)
+		isFirstField = false
+
 		if f.DiscriminantValue() != 0xFFFF {
 			fprintf(w, "};")
 		}
@@ -955,6 +964,25 @@ func (n *node) defineStructList(w io.Writer) {
 	fprintf(w, "\tfor i := 0; i < n; i++ { a[i] = s.At(i) }\n")
 	fprintf(w, "\treturn a\n}\n")
 	fprintf(w, "func (s %s_List) Set(i int, item %s) { C.PointerList(s).Set(i, C.Object(item)) }\n", n.name, n.name)
+}
+
+var (
+	disabledJSON           = false
+	ignorePrivateInfoField = false
+	privateInfoField       = map[string]bool{
+		"fbName":      true,
+		"nickname":    true,
+		"fbImageLink": true,
+	}
+)
+
+func init() {
+	if disable, err := strconv.ParseBool(os.Getenv("GO_CAPNP_JSON_DISABLE")); err == nil {
+		disabledJSON = disable
+	}
+	if disable, err := strconv.ParseBool(os.Getenv("IGNORE_PRIVATE_INFO_FIELD")); err == nil {
+		ignorePrivateInfoField = disable
+	}
 }
 
 func main() {
