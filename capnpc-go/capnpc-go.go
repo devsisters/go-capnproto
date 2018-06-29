@@ -970,9 +970,11 @@ var (
 	disabledJSON           = false
 	ignorePrivateInfoField = false
 	privateInfoField       = map[string]bool{
-		"fbName":      true,
-		"nickname":    true,
-		"fbImageLink": true,
+		"fbName":        true,
+		"nickname":      true,
+		"fbImageLink":   true,
+		"fbAccessToken": true,
+		"googleEmail":   true,
 	}
 )
 
