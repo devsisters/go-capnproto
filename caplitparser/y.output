@@ -1,0 +1,289 @@
+
+state 0
+	$accept: .start $end 
+
+	tLISTOPEN  shift 4
+	tOBJECTOPEN  shift 3
+	tMINUS  shift 12
+	tSTRING  shift 6
+	tINT  shift 7
+	tFLOAT  shift 8
+	tIDENT  shift 11
+	tFALSE  shift 10
+	tTRUE  shift 9
+	.  error
+
+	start  goto 1
+	node  goto 2
+	minus  goto 5
+
+state 1
+	$accept:  start.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	start:  node.    (1)
+	start:  node.tCOMMA 
+
+	tCOMMA  shift 13
+	.  reduce 1 (src line 18)
+
+
+state 3
+	node:  tOBJECTOPEN.objectnodes tOBJECTCLOSE 
+	node:  tOBJECTOPEN.objectnodes tCOMMA tOBJECTCLOSE 
+	objectnodes: .    (16)
+
+	tIDENT  shift 15
+	.  reduce 16 (src line 63)
+
+	objectnodes  goto 14
+
+state 4
+	node:  tLISTOPEN.listnodes tLISTCLOSE 
+	node:  tLISTOPEN.listnodes tCOMMA tLISTCLOSE 
+	listnodes: .    (19)
+
+	tLISTOPEN  shift 4
+	tOBJECTOPEN  shift 3
+	tMINUS  shift 12
+	tSTRING  shift 6
+	tINT  shift 7
+	tFLOAT  shift 8
+	tIDENT  shift 11
+	tFALSE  shift 10
+	tTRUE  shift 9
+	.  reduce 19 (src line 77)
+
+	node  goto 17
+	listnodes  goto 16
+	minus  goto 5
+
+state 5
+	node:  minus.    (7)
+
+	.  reduce 7 (src line 45)
+
+
+state 6
+	node:  tSTRING.    (8)
+
+	.  reduce 8 (src line 46)
+
+
+state 7
+	node:  tINT.    (9)
+
+	.  reduce 9 (src line 47)
+
+
+state 8
+	node:  tFLOAT.    (10)
+
+	.  reduce 10 (src line 48)
+
+
+state 9
+	node:  tTRUE.    (11)
+
+	.  reduce 11 (src line 49)
+
+
+state 10
+	node:  tFALSE.    (12)
+
+	.  reduce 12 (src line 50)
+
+
+state 11
+	node:  tIDENT.    (13)
+
+	.  reduce 13 (src line 51)
+
+
+state 12
+	minus:  tMINUS.tFLOAT 
+	minus:  tMINUS.tINT 
+
+	tINT  shift 19
+	tFLOAT  shift 18
+	.  error
+
+
+state 13
+	start:  node tCOMMA.    (2)
+
+	.  reduce 2 (src line 23)
+
+
+state 14
+	node:  tOBJECTOPEN objectnodes.tOBJECTCLOSE 
+	node:  tOBJECTOPEN objectnodes.tCOMMA tOBJECTCLOSE 
+	objectnodes:  objectnodes.tCOMMA tIDENT tASSIGN node 
+
+	tOBJECTCLOSE  shift 20
+	tCOMMA  shift 21
+	.  error
+
+
+state 15
+	objectnodes:  tIDENT.tASSIGN node 
+
+	tASSIGN  shift 22
+	.  error
+
+
+state 16
+	node:  tLISTOPEN listnodes.tLISTCLOSE 
+	node:  tLISTOPEN listnodes.tCOMMA tLISTCLOSE 
+	listnodes:  listnodes.tCOMMA node 
+
+	tLISTCLOSE  shift 23
+	tCOMMA  shift 24
+	.  error
+
+
+state 17
+	listnodes:  node.    (17)
+
+	.  reduce 17 (src line 68)
+
+
+state 18
+	minus:  tMINUS tFLOAT.    (20)
+
+	.  reduce 20 (src line 82)
+
+
+state 19
+	minus:  tMINUS tINT.    (21)
+
+	.  reduce 21 (src line 87)
+
+
+state 20
+	node:  tOBJECTOPEN objectnodes tOBJECTCLOSE.    (3)
+
+	.  reduce 3 (src line 28)
+
+
+state 21
+	node:  tOBJECTOPEN objectnodes tCOMMA.tOBJECTCLOSE 
+	objectnodes:  objectnodes tCOMMA.tIDENT tASSIGN node 
+
+	tOBJECTCLOSE  shift 25
+	tIDENT  shift 26
+	.  error
+
+
+state 22
+	objectnodes:  tIDENT tASSIGN.node 
+
+	tLISTOPEN  shift 4
+	tOBJECTOPEN  shift 3
+	tMINUS  shift 12
+	tSTRING  shift 6
+	tINT  shift 7
+	tFLOAT  shift 8
+	tIDENT  shift 11
+	tFALSE  shift 10
+	tTRUE  shift 9
+	.  error
+
+	node  goto 27
+	minus  goto 5
+
+state 23
+	node:  tLISTOPEN listnodes tLISTCLOSE.    (5)
+
+	.  reduce 5 (src line 37)
+
+
+state 24
+	node:  tLISTOPEN listnodes tCOMMA.tLISTCLOSE 
+	listnodes:  listnodes tCOMMA.node 
+
+	tLISTOPEN  shift 4
+	tLISTCLOSE  shift 28
+	tOBJECTOPEN  shift 3
+	tMINUS  shift 12
+	tSTRING  shift 6
+	tINT  shift 7
+	tFLOAT  shift 8
+	tIDENT  shift 11
+	tFALSE  shift 10
+	tTRUE  shift 9
+	.  error
+
+	node  goto 29
+	minus  goto 5
+
+state 25
+	node:  tOBJECTOPEN objectnodes tCOMMA tOBJECTCLOSE.    (4)
+
+	.  reduce 4 (src line 33)
+
+
+state 26
+	objectnodes:  objectnodes tCOMMA tIDENT.tASSIGN node 
+
+	tASSIGN  shift 30
+	.  error
+
+
+state 27
+	objectnodes:  tIDENT tASSIGN node.    (14)
+
+	.  reduce 14 (src line 54)
+
+
+state 28
+	node:  tLISTOPEN listnodes tCOMMA tLISTCLOSE.    (6)
+
+	.  reduce 6 (src line 41)
+
+
+state 29
+	listnodes:  listnodes tCOMMA node.    (18)
+
+	.  reduce 18 (src line 73)
+
+
+state 30
+	objectnodes:  objectnodes tCOMMA tIDENT tASSIGN.node 
+
+	tLISTOPEN  shift 4
+	tOBJECTOPEN  shift 3
+	tMINUS  shift 12
+	tSTRING  shift 6
+	tINT  shift 7
+	tFLOAT  shift 8
+	tIDENT  shift 11
+	tFALSE  shift 10
+	tTRUE  shift 9
+	.  error
+
+	node  goto 31
+	minus  goto 5
+
+state 31
+	objectnodes:  objectnodes tCOMMA tIDENT tASSIGN node.    (15)
+
+	.  reduce 15 (src line 59)
+
+
+16 terminals, 6 nonterminals
+22 grammar rules, 32/8000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+55 working sets used
+memory: parser 12/120000
+20 extra closures
+58 shift entries, 1 exceptions
+9 goto entries
+4 entries saved by goto default
+Optimizer space used: output 40/120000
+40 table entries, 0 zero
+maximum spread: 16, maximum offset: 30
