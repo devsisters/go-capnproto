@@ -38,12 +38,12 @@ type lexer struct {
 
 func Parse(input []byte) (*Node, error) {
 	p := yyNewParser()
-	lexer := &lexer{}
+	lexer := lexer{}
 	lexer.s = scanner.Scanner{}
 	fset := token.NewFileSet()
 	file := fset.AddFile("", fset.Base(), len(input))
 	lexer.s.Init(file, input, nil, 3)
-	_ = p.Parse(lexer)
+	_ = p.Parse(&lexer)
 	if lexer.err != nil {
 		return nil, lexer.err
 	}
