@@ -5,6 +5,7 @@ import (
 	"errors"
 	"math"
 
+	"github.com/glycerine/go-capnproto/caplitparser"
 	"github.com/glycerine/rbtree"
 )
 
@@ -1501,4 +1502,10 @@ func ListD(val uint64) int {
 // For manually copying between segments. Not typically needed.
 func CopyToFrom(dest, src Object) error {
 	return copyStructHandlingVersionSkew(dest, src, nil, 0, 0, 0)
+}
+
+type CapLitNode = caplitparser.Node
+
+func ParseCapLit(b []byte) (*CapLitNode, error) {
+	return caplitparser.Parse(b)
 }
