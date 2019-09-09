@@ -5,7 +5,7 @@ import (
 	"errors"
 	"math"
 
-	"github.com/glycerine/go-capnproto/caplitparser"
+	"github.com/devsisters/go-capnproto/caplitparser"
 	"github.com/glycerine/rbtree"
 )
 

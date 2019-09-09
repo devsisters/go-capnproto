@@ -8,8 +8,8 @@ import (
 	"io/ioutil"
 	"testing"
 
-	capn "github.com/glycerine/go-capnproto"
-	air "github.com/glycerine/go-capnproto/aircraftlib"
+	capn "github.com/devsisters/go-capnproto"
+	air "github.com/devsisters/go-capnproto/aircraftlib"
 	cv "github.com/glycerine/goconvey/convey"
 )
 
@@ -17,7 +17,6 @@ var benchForever bool
 
 func init() {
 	flag.BoolVar(&benchForever, "bench.forever", false, "benchmark forever")
-	flag.Parse()
 }
 
 func TestReadFromStream(t *testing.T) {

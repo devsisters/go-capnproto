@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	air "github.com/glycerine/go-capnproto/aircraftlib"
+	air "github.com/devsisters/go-capnproto/aircraftlib"
 	cv "github.com/glycerine/goconvey/convey"
 )
 

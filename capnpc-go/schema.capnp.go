@@ -3,7 +3,7 @@ package main
 // AUTO GENERATED - DO NOT EDIT
 
 import (
-	C "github.com/glycerine/go-capnproto"
+	C "github.com/devsisters/go-capnproto"
 	"math"
 )
 

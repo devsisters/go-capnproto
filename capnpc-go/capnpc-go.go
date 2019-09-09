@@ -11,11 +11,11 @@ import (
 	"strconv"
 	"strings"
 
-	C "github.com/glycerine/go-capnproto"
+	C "github.com/devsisters/go-capnproto"
 )
 
 var (
-	go_capnproto_import = "github.com/glycerine/go-capnproto"
+	go_capnproto_import = "github.com/devsisters/go-capnproto"
 	fprintf             = fmt.Fprintf
 	sprintf             = fmt.Sprintf
 	title               = strings.Title

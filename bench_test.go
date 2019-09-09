@@ -10,7 +10,7 @@ import (
 	"time"
 	"unsafe"
 
-	capn "github.com/glycerine/go-capnproto"
+	capn "github.com/devsisters/go-capnproto"
 )
 
 // Albert's benchmarks:

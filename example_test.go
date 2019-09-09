@@ -5,8 +5,8 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	capn "github.com/glycerine/go-capnproto"
-	air "github.com/glycerine/go-capnproto/aircraftlib"
+	capn "github.com/devsisters/go-capnproto"
+	air "github.com/devsisters/go-capnproto/aircraftlib"
 )
 
 func ExampleReadFromStream() {

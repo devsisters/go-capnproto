@@ -3,8 +3,8 @@ package capn_test
 import (
 	"testing"
 
-	"github.com/glycerine/go-capnproto"
-	air "github.com/glycerine/go-capnproto/aircraftlib"
+	"github.com/devsisters/go-capnproto"
+	air "github.com/devsisters/go-capnproto/aircraftlib"
 	cv "github.com/glycerine/goconvey/convey"
 )
 
