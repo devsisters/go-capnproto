@@ -94,60 +94,77 @@ func (s Zdate) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"year\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Year()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"year\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"month\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Month()
-		buf, err = json.Marshal(s)
+		{
+			s := s.Year()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"month\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"day\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Day()
-		buf, err = json.Marshal(s)
+		{
+			s := s.Month()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"day\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.Day()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -395,22 +412,33 @@ func (s Zdata) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"data\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Data()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"data\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.Data()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -754,131 +782,157 @@ func (s PlaneBase) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"name\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Name()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"name\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"homes\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Homes()
 		{
-			err = b.WriteByte('[')
+			s := s.Name()
+			buf, err = json.Marshal(s)
 			if err != nil {
 				return err
 			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
 			}
-			err = b.WriteByte(']')
 		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"rating\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Rating()
-		buf, err = json.Marshal(s)
+		_, err = b.WriteString("\"homes\":")
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		{
+			s := s.Homes()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"canFly\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.CanFly()
-		buf, err = json.Marshal(s)
+		_, err = b.WriteString("\"rating\":")
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		{
+			s := s.Rating()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"capacity\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Capacity()
-		buf, err = json.Marshal(s)
+		_, err = b.WriteString("\"canFly\":")
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		{
+			s := s.CanFly()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"maxSpeed\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.MaxSpeed()
-		buf, err = json.Marshal(s)
+		_, err = b.WriteString("\"capacity\":")
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		{
+			s := s.Capacity()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"maxSpeed\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.MaxSpeed()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -1240,18 +1294,29 @@ func (s B737) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"base\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Base()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"base\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Base()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -1441,18 +1506,29 @@ func (s A320) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"base\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Base()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"base\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Base()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -1642,18 +1718,29 @@ func (s F16) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"base\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Base()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"base\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Base()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -1887,145 +1974,171 @@ func (s Regression) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"base\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Base()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"b0\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.B0()
-		buf, err = json.Marshal(s)
+		_, err = b.WriteString("\"base\":")
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
-		if err != nil {
-			return err
-		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"beta\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Beta()
 		{
-			err = b.WriteByte('[')
+			s := s.Base()
+			err = s.WriteJSON(b)
 			if err != nil {
 				return err
 			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				buf, err = json.Marshal(s)
-				if err != nil {
-					return err
-				}
-				_, err = b.Write(buf)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
 		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"planes\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Planes()
+		_, err = b.WriteString("\"b0\":")
+		if err != nil {
+			return err
+		}
 		{
-			err = b.WriteByte('[')
+			s := s.B0()
+			buf, err = json.Marshal(s)
 			if err != nil {
 				return err
 			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
 			}
-			err = b.WriteByte(']')
 		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"ymu\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Ymu()
-		buf, err = json.Marshal(s)
+		_, err = b.WriteString("\"beta\":")
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		{
+			s := s.Beta()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"ysd\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Ysd()
-		buf, err = json.Marshal(s)
+		_, err = b.WriteString("\"planes\":")
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		{
+			s := s.Planes()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"ymu\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Ymu()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"ysd\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Ysd()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -2465,57 +2578,89 @@ func (s Aircraft) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	if s.Which() == AIRCRAFT_VOID {
-		_, err = b.WriteString("\"void\":")
-		if err != nil {
-			return err
-		}
-		_ = s
-		_, err = b.WriteString("null")
-		if err != nil {
-			return err
-		}
-	}
-	if s.Which() == AIRCRAFT_B737 {
-		_, err = b.WriteString("\"b737\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.B737()
-			err = s.WriteJSON(b)
+	{
+		isFirstField := true
+		_ = isFirstField
+		if s.Which() == AIRCRAFT_VOID {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"void\":")
+			if err != nil {
+				return err
+			}
+			_ = s
+			_, err = b.WriteString("null")
 			if err != nil {
 				return err
 			}
 		}
-	}
-	if s.Which() == AIRCRAFT_A320 {
-		_, err = b.WriteString("\"a320\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.A320()
-			err = s.WriteJSON(b)
+		if s.Which() == AIRCRAFT_B737 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
 			if err != nil {
 				return err
 			}
-		}
-	}
-	if s.Which() == AIRCRAFT_F16 {
-		_, err = b.WriteString("\"f16\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.F16()
-			err = s.WriteJSON(b)
+			_, err = b.WriteString("\"b737\":")
 			if err != nil {
 				return err
 			}
+			{
+				s := s.B737()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
 		}
+		if s.Which() == AIRCRAFT_A320 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"a320\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.A320()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == AIRCRAFT_F16 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"f16\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.F16()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -3357,892 +3502,1176 @@ func (s Z) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	if s.Which() == Z_VOID {
-		_, err = b.WriteString("\"void\":")
-		if err != nil {
-			return err
-		}
-		_ = s
-		_, err = b.WriteString("null")
-		if err != nil {
-			return err
-		}
-	}
-	if s.Which() == Z_ZZ {
-		_, err = b.WriteString("\"zz\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Zz()
-			err = s.WriteJSON(b)
+	{
+		isFirstField := true
+		_ = isFirstField
+		if s.Which() == Z_VOID {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
 			if err != nil {
 				return err
 			}
-		}
-	}
-	if s.Which() == Z_F64 {
-		_, err = b.WriteString("\"f64\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.F64()
-			buf, err = json.Marshal(s)
+			_, err = b.WriteString("\"void\":")
 			if err != nil {
 				return err
 			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_F32 {
-		_, err = b.WriteString("\"f32\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.F32()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_I64 {
-		_, err = b.WriteString("\"i64\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.I64()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_I32 {
-		_, err = b.WriteString("\"i32\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.I32()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_I16 {
-		_, err = b.WriteString("\"i16\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.I16()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_I8 {
-		_, err = b.WriteString("\"i8\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.I8()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_U64 {
-		_, err = b.WriteString("\"u64\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.U64()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_U32 {
-		_, err = b.WriteString("\"u32\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.U32()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_U16 {
-		_, err = b.WriteString("\"u16\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.U16()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_U8 {
-		_, err = b.WriteString("\"u8\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.U8()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_BOOL {
-		_, err = b.WriteString("\"bool\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Bool()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_TEXT {
-		_, err = b.WriteString("\"text\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Text()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_BLOB {
-		_, err = b.WriteString("\"blob\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Blob()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
-			}
-			_, err = b.Write(buf)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_F64VEC {
-		_, err = b.WriteString("\"f64vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.F64vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_F32VEC {
-		_, err = b.WriteString("\"f32vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.F32vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_I64VEC {
-		_, err = b.WriteString("\"i64vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.I64vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_I32VEC {
-		_, err = b.WriteString("\"i32vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.I32vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_I16VEC {
-		_, err = b.WriteString("\"i16vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.I16vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_I8VEC {
-		_, err = b.WriteString("\"i8vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.I8vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_U64VEC {
-		_, err = b.WriteString("\"u64vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.U64vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_U32VEC {
-		_, err = b.WriteString("\"u32vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.U32vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_U16VEC {
-		_, err = b.WriteString("\"u16vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.U16vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_U8VEC {
-		_, err = b.WriteString("\"u8vec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.U8vec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_ZVEC {
-		_, err = b.WriteString("\"zvec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Zvec()
-			{
-				err = b.WriteByte('[')
-				if err != nil {
-					return err
-				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					err = s.WriteJSON(b)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_ZVECVEC {
-		_, err = b.WriteString("\"zvecvec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Zvecvec()
 			_ = s
-			_, err = b.WriteString("\"untyped list\"")
+			_, err = b.WriteString("null")
 			if err != nil {
 				return err
 			}
 		}
-	}
-	if s.Which() == Z_ZDATE {
-		_, err = b.WriteString("\"zdate\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Zdate()
-			err = s.WriteJSON(b)
+		if s.Which() == Z_ZZ {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
 			if err != nil {
 				return err
 			}
-		}
-	}
-	if s.Which() == Z_ZDATA {
-		_, err = b.WriteString("\"zdata\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Zdata()
-			err = s.WriteJSON(b)
+			_, err = b.WriteString("\"zz\":")
 			if err != nil {
 				return err
 			}
-		}
-	}
-	if s.Which() == Z_AIRCRAFTVEC {
-		_, err = b.WriteString("\"aircraftvec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Aircraftvec()
 			{
-				err = b.WriteByte('[')
+				s := s.Zz()
+				err = s.WriteJSON(b)
 				if err != nil {
 					return err
 				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					err = s.WriteJSON(b)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
 			}
+		}
+		if s.Which() == Z_F64 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
 			if err != nil {
 				return err
 			}
-		}
-	}
-	if s.Which() == Z_AIRCRAFT {
-		_, err = b.WriteString("\"aircraft\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Aircraft()
-			err = s.WriteJSON(b)
+			_, err = b.WriteString("\"f64\":")
 			if err != nil {
 				return err
 			}
-		}
-	}
-	if s.Which() == Z_REGRESSION {
-		_, err = b.WriteString("\"regression\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Regression()
-			err = s.WriteJSON(b)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_PLANEBASE {
-		_, err = b.WriteString("\"planebase\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Planebase()
-			err = s.WriteJSON(b)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_AIRPORT {
-		_, err = b.WriteString("\"airport\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Airport()
-			err = s.WriteJSON(b)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_B737 {
-		_, err = b.WriteString("\"b737\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.B737()
-			err = s.WriteJSON(b)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_A320 {
-		_, err = b.WriteString("\"a320\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.A320()
-			err = s.WriteJSON(b)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_F16 {
-		_, err = b.WriteString("\"f16\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.F16()
-			err = s.WriteJSON(b)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_ZDATEVEC {
-		_, err = b.WriteString("\"zdatevec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Zdatevec()
 			{
-				err = b.WriteByte('[')
+				s := s.F64()
+				buf, err = json.Marshal(s)
 				if err != nil {
 					return err
 				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					err = s.WriteJSON(b)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
-			}
-			if err != nil {
-				return err
-			}
-		}
-	}
-	if s.Which() == Z_ZDATAVEC {
-		_, err = b.WriteString("\"zdatavec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Zdatavec()
-			{
-				err = b.WriteByte('[')
+				_, err = b.Write(buf)
 				if err != nil {
 					return err
 				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					err = s.WriteJSON(b)
-					if err != nil {
-						return err
-					}
-				}
-				err = b.WriteByte(']')
 			}
+		}
+		if s.Which() == Z_F32 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
 			if err != nil {
 				return err
 			}
-		}
-	}
-	if s.Which() == Z_BOOLVEC {
-		_, err = b.WriteString("\"boolvec\":")
-		if err != nil {
-			return err
-		}
-		{
-			s := s.Boolvec()
+			_, err = b.WriteString("\"f32\":")
+			if err != nil {
+				return err
+			}
 			{
-				err = b.WriteByte('[')
+				s := s.F32()
+				buf, err = json.Marshal(s)
 				if err != nil {
 					return err
 				}
-				for i, s := range s.ToArray() {
-					if i != 0 {
-						_, err = b.WriteString(", ")
-					}
-					if err != nil {
-						return err
-					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
-					}
-					_, err = b.Write(buf)
-					if err != nil {
-						return err
-					}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
 				}
-				err = b.WriteByte(']')
 			}
+		}
+		if s.Which() == Z_I64 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
 			if err != nil {
 				return err
 			}
+			_, err = b.WriteString("\"i64\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.I64()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
 		}
+		if s.Which() == Z_I32 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"i32\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.I32()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_I16 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"i16\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.I16()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_I8 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"i8\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.I8()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_U64 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"u64\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.U64()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_U32 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"u32\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.U32()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_U16 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"u16\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.U16()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_U8 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"u8\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.U8()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_BOOL {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"bool\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Bool()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_TEXT {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"text\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Text()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_BLOB {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"blob\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Blob()
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
+				_, err = b.Write(buf)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_F64VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"f64vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.F64vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_F32VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"f32vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.F32vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_I64VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"i64vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.I64vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_I32VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"i32vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.I32vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_I16VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"i16vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.I16vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_I8VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"i8vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.I8vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_U64VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"u64vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.U64vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_U32VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"u32vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.U32vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_U16VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"u16vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.U16vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_U8VEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"u8vec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.U8vec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_ZVEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"zvec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Zvec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						err = s.WriteJSON(b)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_ZVECVEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"zvecvec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Zvecvec()
+				_ = s
+				_, err = b.WriteString("\"untyped list\"")
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_ZDATE {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"zdate\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Zdate()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_ZDATA {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"zdata\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Zdata()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_AIRCRAFTVEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"aircraftvec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Aircraftvec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						err = s.WriteJSON(b)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_AIRCRAFT {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"aircraft\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Aircraft()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_REGRESSION {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"regression\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Regression()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_PLANEBASE {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"planebase\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Planebase()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_AIRPORT {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"airport\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Airport()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_B737 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"b737\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.B737()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_A320 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"a320\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.A320()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_F16 {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"f16\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.F16()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_ZDATEVEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"zdatevec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Zdatevec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						err = s.WriteJSON(b)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_ZDATAVEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"zdatavec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Zdatavec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						err = s.WriteJSON(b)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		if s.Which() == Z_BOOLVEC {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"boolvec\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.Boolvec()
+				{
+					err = b.WriteByte('[')
+					if err != nil {
+						return err
+					}
+					for i, s := range s.ToArray() {
+						if i != 0 {
+							_, err = b.WriteString(", ")
+						}
+						if err != nil {
+							return err
+						}
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
+						_, err = b.Write(buf)
+						if err != nil {
+							return err
+						}
+					}
+					err = b.WriteByte(']')
+				}
+				if err != nil {
+					return err
+				}
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -5793,78 +6222,95 @@ func (s Counter) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"size\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Size()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"size\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"words\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Words()
-		buf, err = json.Marshal(s)
-		if err != nil {
-			return err
-		}
-		_, err = b.Write(buf)
-		if err != nil {
-			return err
-		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"wordlist\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Wordlist()
 		{
-			err = b.WriteByte('[')
+			s := s.Size()
+			buf, err = json.Marshal(s)
 			if err != nil {
 				return err
 			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				buf, err = json.Marshal(s)
-				if err != nil {
-					return err
-				}
-				_, err = b.Write(buf)
-				if err != nil {
-					return err
-				}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
 			}
-			err = b.WriteByte(']')
 		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"words\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Words()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"wordlist\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Wordlist()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -6140,18 +6586,29 @@ func (s Bag) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"counter\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Counter()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"counter\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Counter()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -6343,36 +6800,47 @@ func (s Zserver) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"waitingjobs\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Waitingjobs()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"waitingjobs\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Waitingjobs()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -6589,59 +7057,73 @@ func (s Zjob) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"cmd\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Cmd()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"cmd\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"args\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Args()
 		{
-			err = b.WriteByte('[')
+			s := s.Cmd()
+			buf, err = json.Marshal(s)
 			if err != nil {
 				return err
 			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				buf, err = json.Marshal(s)
-				if err != nil {
-					return err
-				}
-				_, err = b.Write(buf)
-				if err != nil {
-					return err
-				}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
 			}
-			err = b.WriteByte(']')
 		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"args\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Args()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -6878,7 +7360,11 @@ func (s VerEmpty) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	err = b.WriteByte('}')
+	{
+		isFirstField := true
+		_ = isFirstField
+		err = b.WriteByte('}')
+	}
 	if err != nil {
 		return err
 	}
@@ -7043,22 +7529,33 @@ func (s VerOneData) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"val\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Val()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"val\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.Val()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -7254,41 +7751,55 @@ func (s VerTwoData) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"val\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Val()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"val\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"duo\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Duo()
-		buf, err = json.Marshal(s)
+		{
+			s := s.Val()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"duo\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.Duo()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -7516,18 +8027,29 @@ func (s VerOnePtr) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"ptr\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Ptr()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"ptr\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Ptr()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -7733,33 +8255,47 @@ func (s VerTwoPtr) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"ptr1\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Ptr1()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"ptr2\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Ptr2()
-		err = s.WriteJSON(b)
+		_, err = b.WriteString("\"ptr1\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.Ptr1()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"ptr2\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Ptr2()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -8011,71 +8547,91 @@ func (s VerTwoDataTwoPtr) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"val\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Val()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"val\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"duo\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Duo()
-		buf, err = json.Marshal(s)
+		{
+			s := s.Val()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"duo\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"ptr1\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Ptr1()
-		err = s.WriteJSON(b)
+		{
+			s := s.Duo()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"ptr2\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Ptr2()
-		err = s.WriteJSON(b)
+		_, err = b.WriteString("\"ptr1\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.Ptr1()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"ptr2\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Ptr2()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -8361,36 +8917,47 @@ func (s HoldsVerEmptyList) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mylist\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Mylist()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mylist\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Mylist()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -8620,36 +9187,47 @@ func (s HoldsVerOneDataList) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mylist\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Mylist()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mylist\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Mylist()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -8879,36 +9457,47 @@ func (s HoldsVerTwoDataList) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mylist\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Mylist()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mylist\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Mylist()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -9136,36 +9725,47 @@ func (s HoldsVerOnePtrList) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mylist\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Mylist()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mylist\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Mylist()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -9393,36 +9993,47 @@ func (s HoldsVerTwoPtrList) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mylist\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Mylist()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mylist\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Mylist()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -9652,36 +10263,47 @@ func (s HoldsVerTwoTwoList) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mylist\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Mylist()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mylist\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Mylist()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -9911,36 +10533,47 @@ func (s HoldsVerTwoTwoPlus) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mylist\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Mylist()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mylist\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Mylist()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -10204,127 +10837,153 @@ func (s VerTwoTwoPlus) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"val\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Val()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"val\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"duo\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Duo()
-		buf, err = json.Marshal(s)
-		if err != nil {
-			return err
-		}
-		_, err = b.Write(buf)
-		if err != nil {
-			return err
-		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"ptr1\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Ptr1()
-		err = s.WriteJSON(b)
-		if err != nil {
-			return err
-		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"ptr2\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Ptr2()
-		err = s.WriteJSON(b)
-		if err != nil {
-			return err
-		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"tre\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Tre()
-		buf, err = json.Marshal(s)
-		if err != nil {
-			return err
-		}
-		_, err = b.Write(buf)
-		if err != nil {
-			return err
-		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"lst3\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Lst3()
 		{
-			err = b.WriteByte('[')
+			s := s.Val()
+			buf, err = json.Marshal(s)
 			if err != nil {
 				return err
 			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				buf, err = json.Marshal(s)
-				if err != nil {
-					return err
-				}
-				_, err = b.Write(buf)
-				if err != nil {
-					return err
-				}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
 			}
-			err = b.WriteByte(']')
 		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"duo\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Duo()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"ptr1\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Ptr1()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"ptr2\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Ptr2()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"tre\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Tre()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"lst3\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Lst3()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -10698,75 +11357,92 @@ func (s HoldsText) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"txt\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Txt()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"txt\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"lst\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Lst()
 		{
-			err = b.WriteByte('[')
+			s := s.Txt()
+			buf, err = json.Marshal(s)
 			if err != nil {
 				return err
 			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				buf, err = json.Marshal(s)
-				if err != nil {
-					return err
-				}
-				_, err = b.Write(buf)
-				if err != nil {
-					return err
-				}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
 			}
-			err = b.WriteByte(']')
 		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"lstlst\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Lstlst()
-		_ = s
-		_, err = b.WriteString("\"untyped list\"")
+		_, err = b.WriteString("\"lst\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.Lst()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"lstlst\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Lstlst()
+			_ = s
+			_, err = b.WriteString("\"untyped list\"")
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -11038,18 +11714,29 @@ func (s WrapEmpty) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mightNotBeReallyEmpty\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.MightNotBeReallyEmpty()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mightNotBeReallyEmpty\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.MightNotBeReallyEmpty()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -11243,18 +11930,29 @@ func (s Wrap2x2) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mightNotBeReallyEmpty\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.MightNotBeReallyEmpty()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mightNotBeReallyEmpty\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.MightNotBeReallyEmpty()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -11448,18 +12146,29 @@ func (s Wrap2x2plus) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"mightNotBeReallyEmpty\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.MightNotBeReallyEmpty()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"mightNotBeReallyEmpty\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.MightNotBeReallyEmpty()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -11656,60 +12365,77 @@ func (s Endpoint) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"ip\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Ip()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"ip\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"port\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Port()
-		buf, err = json.Marshal(s)
+		{
+			s := s.Ip()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"port\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"hostname\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.Hostname()
-		buf, err = json.Marshal(s)
+		{
+			s := s.Port()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"hostname\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.Hostname()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -11969,29 +12695,47 @@ func (s VoidUnion) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	if s.Which() == VOIDUNION_A {
-		_, err = b.WriteString("\"a\":")
-		if err != nil {
-			return err
+	{
+		isFirstField := true
+		_ = isFirstField
+		if s.Which() == VOIDUNION_A {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"a\":")
+			if err != nil {
+				return err
+			}
+			_ = s
+			_, err = b.WriteString("null")
+			if err != nil {
+				return err
+			}
 		}
-		_ = s
-		_, err = b.WriteString("null")
-		if err != nil {
-			return err
+		if s.Which() == VOIDUNION_B {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"b\":")
+			if err != nil {
+				return err
+			}
+			_ = s
+			_, err = b.WriteString("null")
+			if err != nil {
+				return err
+			}
 		}
+		err = b.WriteByte('}')
 	}
-	if s.Which() == VOIDUNION_B {
-		_, err = b.WriteString("\"b\":")
-		if err != nil {
-			return err
-		}
-		_ = s
-		_, err = b.WriteString("null")
-		if err != nil {
-			return err
-		}
-	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -12190,40 +12934,51 @@ func (s Nester1Capn) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"strs\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Strs()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				buf, err = json.Marshal(s)
-				if err != nil {
-					return err
-				}
-				_, err = b.Write(buf)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"strs\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Strs()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
+					_, err = b.Write(buf)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -12441,19 +13196,30 @@ func (s RWTestCapn) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"nestMatrix\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.NestMatrix()
-		_ = s
-		_, err = b.WriteString("\"untyped list\"")
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"nestMatrix\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.NestMatrix()
+			_ = s
+			_, err = b.WriteString("\"untyped list\"")
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -12645,36 +13411,47 @@ func (s ListStructCapn) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"vec\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Vec()
-		{
-			err = b.WriteByte('[')
-			if err != nil {
-				return err
-			}
-			for i, s := range s.ToArray() {
-				if i != 0 {
-					_, err = b.WriteString(", ")
-				}
-				if err != nil {
-					return err
-				}
-				err = s.WriteJSON(b)
-				if err != nil {
-					return err
-				}
-			}
-			err = b.WriteByte(']')
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
 		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"vec\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.Vec()
+			{
+				err = b.WriteByte('[')
+				if err != nil {
+					return err
+				}
+				for i, s := range s.ToArray() {
+					if i != 0 {
+						_, err = b.WriteString(", ")
+					}
+					if err != nil {
+						return err
+					}
+					err = s.WriteJSON(b)
+					if err != nil {
+						return err
+					}
+				}
+				err = b.WriteByte(']')
+			}
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -12908,33 +13685,47 @@ func (s StackingRoot) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"a\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.A()
-		err = s.WriteJSON(b)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"aWithDefault\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.AWithDefault()
-		err = s.WriteJSON(b)
+		_, err = b.WriteString("\"a\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.A()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
+		if err != nil {
+			return err
+		}
+		_, err = b.WriteString("\"aWithDefault\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.AWithDefault()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -13156,37 +13947,51 @@ func (s StackingA) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"num\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Num()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"num\":")
 		if err != nil {
 			return err
 		}
-	}
-	err = b.WriteByte(',')
-	if err != nil {
-		return err
-	}
-	_, err = b.WriteString("\"b\":")
-	if err != nil {
-		return err
-	}
-	{
-		s := s.B()
-		err = s.WriteJSON(b)
+		{
+			s := s.Num()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
+		_, err = b.WriteString("\"b\":")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.B()
+			err = s.WriteJSON(b)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}
@@ -13400,22 +14205,33 @@ func (s StackingB) WriteJSON(w io.Writer) error {
 	if err != nil {
 		return err
 	}
-	_, err = b.WriteString("\"num\":")
-	if err != nil {
-		return err
-	}
 	{
-		s := s.Num()
-		buf, err = json.Marshal(s)
+		isFirstField := true
+		_ = isFirstField
+		if !isFirstField {
+			err = b.WriteByte(',')
+		}
+		isFirstField = false
 		if err != nil {
 			return err
 		}
-		_, err = b.Write(buf)
+		_, err = b.WriteString("\"num\":")
 		if err != nil {
 			return err
 		}
+		{
+			s := s.Num()
+			buf, err = json.Marshal(s)
+			if err != nil {
+				return err
+			}
+			_, err = b.Write(buf)
+			if err != nil {
+				return err
+			}
+		}
+		err = b.WriteByte('}')
 	}
-	err = b.WriteByte('}')
 	if err != nil {
 		return err
 	}

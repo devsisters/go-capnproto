@@ -819,7 +819,7 @@ func (n *node) jsonEnum(w io.Writer) {
 func (n *node) jsonStruct(w io.Writer) {
 	fprintf(w, `err = b.WriteByte('{');`)
 	writeErrCheck(w)
-	isFirstField := true
+	fprintf(w, `{;isFirstField := true; _ = isFirstField;`)
 
 	for _, f := range n.codeOrderFields() {
 		if ignorePrivateInfoField && privateInfoField[f.Name()] {
@@ -829,23 +829,23 @@ func (n *node) jsonStruct(w io.Writer) {
 		if f.DiscriminantValue() != 0xFFFF {
 			enumname := fmt.Sprintf("%s_%s", strings.ToUpper(n.name), strings.ToUpper(f.Name()))
 			fprintf(w, "if s.Which() == %s {", enumname)
-		} else if !isFirstField {
-			fprintf(w, `
-				err = b.WriteByte(',');
-			`)
-			writeErrCheck(w)
 		}
+		fprintf(w, `if !isFirstField {`)
+		fprintf(w, `err = b.WriteByte(',');`)
+		fprintf(w, `};`)
+		fprintf(w, `isFirstField = false;`)
+		writeErrCheck(w)
 
 		fprintf(w, `_, err = b.WriteString("\"%s\":");`, f.Name())
 		writeErrCheck(w)
 		f.json(w)
-		isFirstField = false
 
 		if f.DiscriminantValue() != 0xFFFF {
 			fprintf(w, "};")
 		}
 	}
 	fprintf(w, `err = b.WriteByte('}');`)
+	fprintf(w, `};`)
 	writeErrCheck(w)
 }
 
