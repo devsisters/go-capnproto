@@ -751,6 +751,9 @@ func (s PlaneBase) LoadStruct(t *PlaneBase_Struct) {
 func (s *PlaneBase_Struct) Copy() *PlaneBase_Struct {
 	t := &PlaneBase_Struct{}
 	t.Name = s.Name
+	for _, e := range s.Homes {
+		t.Homes = append(t.Homes, e)
+	}
 	t.Rating = s.Rating
 	t.CanFly = s.CanFly
 	t.Capacity = s.Capacity
@@ -1942,8 +1945,15 @@ func (s *Regression_Struct) Copy() *Regression_Struct {
 		t.Base = s.Base.Copy()
 	}
 	t.B0 = s.B0
+	for _, e := range s.Beta {
+		t.Beta = append(t.Beta, e)
+	}
 	for _, e := range s.Planes {
-		t.Planes = append(t.Planes, e)
+		if e != nil {
+			t.Planes = append(t.Planes, e.Copy())
+		} else {
+			t.Planes = append(t.Planes, nil)
+		}
 	}
 	t.Ymu = s.Ymu
 	t.Ysd = s.Ysd
@@ -2880,64 +2890,76 @@ const (
 	Z_BOOLVEC     Z_Which = 39
 )
 
-func NewZ(s *C.Segment) Z             { return Z(s.NewStruct(16, 1)) }
-func NewRootZ(s *C.Segment) Z         { return Z(s.NewRootStruct(16, 1)) }
-func AutoNewZ(s *C.Segment) Z         { return Z(s.NewStructAR(16, 1)) }
-func ReadRootZ(s *C.Segment) Z        { return Z(s.Root(0).ToStruct()) }
-func (s Z) Which() Z_Which            { return Z_Which(C.Struct(s).Get16(0)) }
-func (s Z) SetVoid()                  { C.Struct(s).Set16(0, 0) }
-func (s Z) Zz() Z                     { return Z(C.Struct(s).GetObject(0).ToStruct()) }
-func (s Z) SetZz(v Z)                 { C.Struct(s).Set16(0, 1); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) F64() float64              { return math.Float64frombits(C.Struct(s).Get64(8)) }
-func (s Z) SetF64(v float64)          { C.Struct(s).Set16(0, 2); C.Struct(s).Set64(8, math.Float64bits(v)) }
-func (s Z) F32() float32              { return math.Float32frombits(C.Struct(s).Get32(8)) }
-func (s Z) SetF32(v float32)          { C.Struct(s).Set16(0, 3); C.Struct(s).Set32(8, math.Float32bits(v)) }
-func (s Z) I64() int64                { return int64(C.Struct(s).Get64(8)) }
-func (s Z) SetI64(v int64)            { C.Struct(s).Set16(0, 4); C.Struct(s).Set64(8, uint64(v)) }
-func (s Z) I32() int32                { return int32(C.Struct(s).Get32(8)) }
-func (s Z) SetI32(v int32)            { C.Struct(s).Set16(0, 5); C.Struct(s).Set32(8, uint32(v)) }
-func (s Z) I16() int16                { return int16(C.Struct(s).Get16(8)) }
-func (s Z) SetI16(v int16)            { C.Struct(s).Set16(0, 6); C.Struct(s).Set16(8, uint16(v)) }
-func (s Z) I8() int8                  { return int8(C.Struct(s).Get8(8)) }
-func (s Z) SetI8(v int8)              { C.Struct(s).Set16(0, 7); C.Struct(s).Set8(8, uint8(v)) }
-func (s Z) U64() uint64               { return C.Struct(s).Get64(8) }
-func (s Z) SetU64(v uint64)           { C.Struct(s).Set16(0, 8); C.Struct(s).Set64(8, v) }
-func (s Z) U32() uint32               { return C.Struct(s).Get32(8) }
-func (s Z) SetU32(v uint32)           { C.Struct(s).Set16(0, 9); C.Struct(s).Set32(8, v) }
-func (s Z) U16() uint16               { return C.Struct(s).Get16(8) }
-func (s Z) SetU16(v uint16)           { C.Struct(s).Set16(0, 10); C.Struct(s).Set16(8, v) }
-func (s Z) U8() uint8                 { return C.Struct(s).Get8(8) }
-func (s Z) SetU8(v uint8)             { C.Struct(s).Set16(0, 11); C.Struct(s).Set8(8, v) }
-func (s Z) Bool() bool                { return C.Struct(s).Get1(64) }
-func (s Z) SetBool(v bool)            { C.Struct(s).Set16(0, 12); C.Struct(s).Set1(64, v) }
-func (s Z) Text() string              { return C.Struct(s).GetObject(0).ToText() }
-func (s Z) TextBytes() []byte         { return C.Struct(s).GetObject(0).ToDataTrimLastByte() }
-func (s Z) SetText(v string)          { C.Struct(s).Set16(0, 13); C.Struct(s).SetObject(0, s.Segment.NewText(v)) }
-func (s Z) Blob() []byte              { return C.Struct(s).GetObject(0).ToData() }
-func (s Z) SetBlob(v []byte)          { C.Struct(s).Set16(0, 14); C.Struct(s).SetObject(0, s.Segment.NewData(v)) }
-func (s Z) F64vec() C.Float64List     { return C.Float64List(C.Struct(s).GetObject(0)) }
-func (s Z) SetF64vec(v C.Float64List) { C.Struct(s).Set16(0, 15); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) F32vec() C.Float32List     { return C.Float32List(C.Struct(s).GetObject(0)) }
-func (s Z) SetF32vec(v C.Float32List) { C.Struct(s).Set16(0, 16); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) I64vec() C.Int64List       { return C.Int64List(C.Struct(s).GetObject(0)) }
-func (s Z) SetI64vec(v C.Int64List)   { C.Struct(s).Set16(0, 17); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) I32vec() C.Int32List       { return C.Int32List(C.Struct(s).GetObject(0)) }
-func (s Z) SetI32vec(v C.Int32List)   { C.Struct(s).Set16(0, 18); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) I16vec() C.Int16List       { return C.Int16List(C.Struct(s).GetObject(0)) }
-func (s Z) SetI16vec(v C.Int16List)   { C.Struct(s).Set16(0, 19); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) I8vec() C.Int8List         { return C.Int8List(C.Struct(s).GetObject(0)) }
-func (s Z) SetI8vec(v C.Int8List)     { C.Struct(s).Set16(0, 20); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) U64vec() C.UInt64List      { return C.UInt64List(C.Struct(s).GetObject(0)) }
-func (s Z) SetU64vec(v C.UInt64List)  { C.Struct(s).Set16(0, 21); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) U32vec() C.UInt32List      { return C.UInt32List(C.Struct(s).GetObject(0)) }
-func (s Z) SetU32vec(v C.UInt32List)  { C.Struct(s).Set16(0, 22); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) U16vec() C.UInt16List      { return C.UInt16List(C.Struct(s).GetObject(0)) }
-func (s Z) SetU16vec(v C.UInt16List)  { C.Struct(s).Set16(0, 23); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) U8vec() C.UInt8List        { return C.UInt8List(C.Struct(s).GetObject(0)) }
-func (s Z) SetU8vec(v C.UInt8List)    { C.Struct(s).Set16(0, 24); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) Zvec() Z_List              { return Z_List(C.Struct(s).GetObject(0)) }
-func (s Z) SetZvec(v Z_List)          { C.Struct(s).Set16(0, 25); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) Zvecvec() C.PointerList    { return C.PointerList(C.Struct(s).GetObject(0)) }
+func NewZ(s *C.Segment) Z      { return Z(s.NewStruct(16, 1)) }
+func NewRootZ(s *C.Segment) Z  { return Z(s.NewRootStruct(16, 1)) }
+func AutoNewZ(s *C.Segment) Z  { return Z(s.NewStructAR(16, 1)) }
+func ReadRootZ(s *C.Segment) Z { return Z(s.Root(0).ToStruct()) }
+func (s Z) Which() Z_Which     { return Z_Which(C.Struct(s).Get16(0)) }
+func (s Z) SetVoid()           { C.Struct(s).Set16(0, 0) }
+func (s Z) Zz() Z              { return Z(C.Struct(s).GetObject(0).ToStruct()) }
+func (s Z) SetZz(v Z)          { C.Struct(s).Set16(0, 1); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) F64() float64       { return math.Float64frombits(C.Struct(s).Get64(8)) }
+func (s Z) SetF64(v float64)   { C.Struct(s).Set16(0, 2); C.Struct(s).Set64(8, math.Float64bits(v)) }
+func (s Z) F32() float32       { return math.Float32frombits(C.Struct(s).Get32(8)) }
+func (s Z) SetF32(v float32)   { C.Struct(s).Set16(0, 3); C.Struct(s).Set32(8, math.Float32bits(v)) }
+func (s Z) I64() int64         { return int64(C.Struct(s).Get64(8)) }
+func (s Z) SetI64(v int64)     { C.Struct(s).Set16(0, 4); C.Struct(s).Set64(8, uint64(v)) }
+func (s Z) I32() int32         { return int32(C.Struct(s).Get32(8)) }
+func (s Z) SetI32(v int32)     { C.Struct(s).Set16(0, 5); C.Struct(s).Set32(8, uint32(v)) }
+func (s Z) I16() int16         { return int16(C.Struct(s).Get16(8)) }
+func (s Z) SetI16(v int16)     { C.Struct(s).Set16(0, 6); C.Struct(s).Set16(8, uint16(v)) }
+func (s Z) I8() int8           { return int8(C.Struct(s).Get8(8)) }
+func (s Z) SetI8(v int8)       { C.Struct(s).Set16(0, 7); C.Struct(s).Set8(8, uint8(v)) }
+func (s Z) U64() uint64        { return C.Struct(s).Get64(8) }
+func (s Z) SetU64(v uint64)    { C.Struct(s).Set16(0, 8); C.Struct(s).Set64(8, v) }
+func (s Z) U32() uint32        { return C.Struct(s).Get32(8) }
+func (s Z) SetU32(v uint32)    { C.Struct(s).Set16(0, 9); C.Struct(s).Set32(8, v) }
+func (s Z) U16() uint16        { return C.Struct(s).Get16(8) }
+func (s Z) SetU16(v uint16)    { C.Struct(s).Set16(0, 10); C.Struct(s).Set16(8, v) }
+func (s Z) U8() uint8          { return C.Struct(s).Get8(8) }
+func (s Z) SetU8(v uint8)      { C.Struct(s).Set16(0, 11); C.Struct(s).Set8(8, v) }
+func (s Z) Bool() bool         { return C.Struct(s).Get1(64) }
+func (s Z) SetBool(v bool)     { C.Struct(s).Set16(0, 12); C.Struct(s).Set1(64, v) }
+func (s Z) Text() string       { return C.Struct(s).GetObject(0).ToText() }
+func (s Z) TextBytes() []byte  { return C.Struct(s).GetObject(0).ToDataTrimLastByte() }
+func (s Z) SetText(v string) {
+	C.Struct(s).Set16(0, 13)
+	C.Struct(s).SetObject(0, s.Segment.NewText(v))
+}
+func (s Z) Blob() []byte { return C.Struct(s).GetObject(0).ToData() }
+func (s Z) SetBlob(v []byte) {
+	C.Struct(s).Set16(0, 14)
+	C.Struct(s).SetObject(0, s.Segment.NewData(v))
+}
+func (s Z) F64vec() C.Float64List { return C.Float64List(C.Struct(s).GetObject(0)) }
+func (s Z) SetF64vec(v C.Float64List) {
+	C.Struct(s).Set16(0, 15)
+	C.Struct(s).SetObject(0, C.Object(v))
+}
+func (s Z) F32vec() C.Float32List { return C.Float32List(C.Struct(s).GetObject(0)) }
+func (s Z) SetF32vec(v C.Float32List) {
+	C.Struct(s).Set16(0, 16)
+	C.Struct(s).SetObject(0, C.Object(v))
+}
+func (s Z) I64vec() C.Int64List      { return C.Int64List(C.Struct(s).GetObject(0)) }
+func (s Z) SetI64vec(v C.Int64List)  { C.Struct(s).Set16(0, 17); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) I32vec() C.Int32List      { return C.Int32List(C.Struct(s).GetObject(0)) }
+func (s Z) SetI32vec(v C.Int32List)  { C.Struct(s).Set16(0, 18); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) I16vec() C.Int16List      { return C.Int16List(C.Struct(s).GetObject(0)) }
+func (s Z) SetI16vec(v C.Int16List)  { C.Struct(s).Set16(0, 19); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) I8vec() C.Int8List        { return C.Int8List(C.Struct(s).GetObject(0)) }
+func (s Z) SetI8vec(v C.Int8List)    { C.Struct(s).Set16(0, 20); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) U64vec() C.UInt64List     { return C.UInt64List(C.Struct(s).GetObject(0)) }
+func (s Z) SetU64vec(v C.UInt64List) { C.Struct(s).Set16(0, 21); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) U32vec() C.UInt32List     { return C.UInt32List(C.Struct(s).GetObject(0)) }
+func (s Z) SetU32vec(v C.UInt32List) { C.Struct(s).Set16(0, 22); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) U16vec() C.UInt16List     { return C.UInt16List(C.Struct(s).GetObject(0)) }
+func (s Z) SetU16vec(v C.UInt16List) { C.Struct(s).Set16(0, 23); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) U8vec() C.UInt8List       { return C.UInt8List(C.Struct(s).GetObject(0)) }
+func (s Z) SetU8vec(v C.UInt8List)   { C.Struct(s).Set16(0, 24); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) Zvec() Z_List             { return Z_List(C.Struct(s).GetObject(0)) }
+func (s Z) SetZvec(v Z_List)         { C.Struct(s).Set16(0, 25); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) Zvecvec() C.PointerList   { return C.PointerList(C.Struct(s).GetObject(0)) }
 func (s Z) SetZvecvec(v C.PointerList) {
 	C.Struct(s).Set16(0, 26)
 	C.Struct(s).SetObject(0, C.Object(v))
@@ -3438,8 +3460,45 @@ func (s *Z_Struct) Copy() *Z_Struct {
 	t.Bool = s.Bool
 	t.Text = s.Text
 	t.Blob = s.Blob
+	for _, e := range s.F64vec {
+		t.F64vec = append(t.F64vec, e)
+	}
+	for _, e := range s.F32vec {
+		t.F32vec = append(t.F32vec, e)
+	}
+	for _, e := range s.I64vec {
+		t.I64vec = append(t.I64vec, e)
+	}
+	for _, e := range s.I32vec {
+		t.I32vec = append(t.I32vec, e)
+	}
+	for _, e := range s.I16vec {
+		t.I16vec = append(t.I16vec, e)
+	}
+	for _, e := range s.I8vec {
+		t.I8vec = append(t.I8vec, e)
+	}
+	for _, e := range s.U64vec {
+		t.U64vec = append(t.U64vec, e)
+	}
+	for _, e := range s.U32vec {
+		t.U32vec = append(t.U32vec, e)
+	}
+	for _, e := range s.U16vec {
+		t.U16vec = append(t.U16vec, e)
+	}
+	for _, e := range s.U8vec {
+		t.U8vec = append(t.U8vec, e)
+	}
 	for _, e := range s.Zvec {
-		t.Zvec = append(t.Zvec, e)
+		if e != nil {
+			t.Zvec = append(t.Zvec, e.Copy())
+		} else {
+			t.Zvec = append(t.Zvec, nil)
+		}
+	}
+	for _, e := range s.Zvecvec {
+		t.Zvecvec = append(t.Zvecvec, e)
 	}
 	if s.Zdate != nil {
 		t.Zdate = s.Zdate.Copy()
@@ -3448,7 +3507,11 @@ func (s *Z_Struct) Copy() *Z_Struct {
 		t.Zdata = s.Zdata.Copy()
 	}
 	for _, e := range s.Aircraftvec {
-		t.Aircraftvec = append(t.Aircraftvec, e)
+		if e != nil {
+			t.Aircraftvec = append(t.Aircraftvec, e.Copy())
+		} else {
+			t.Aircraftvec = append(t.Aircraftvec, nil)
+		}
 	}
 	if s.Aircraft != nil {
 		t.Aircraft = s.Aircraft.Copy()
@@ -3470,10 +3533,21 @@ func (s *Z_Struct) Copy() *Z_Struct {
 		t.F16 = s.F16.Copy()
 	}
 	for _, e := range s.Zdatevec {
-		t.Zdatevec = append(t.Zdatevec, e)
+		if e != nil {
+			t.Zdatevec = append(t.Zdatevec, e.Copy())
+		} else {
+			t.Zdatevec = append(t.Zdatevec, nil)
+		}
 	}
 	for _, e := range s.Zdatavec {
-		t.Zdatavec = append(t.Zdatavec, e)
+		if e != nil {
+			t.Zdatavec = append(t.Zdatavec, e.Copy())
+		} else {
+			t.Zdatavec = append(t.Zdatavec, nil)
+		}
+	}
+	for _, e := range s.Boolvec {
+		t.Boolvec = append(t.Boolvec, e)
 	}
 	return t
 }
@@ -6195,6 +6269,9 @@ func (s *Counter_Struct) Copy() *Counter_Struct {
 	t := &Counter_Struct{}
 	t.Size = s.Size
 	t.Words = s.Words
+	for _, e := range s.Wordlist {
+		t.Wordlist = append(t.Wordlist, e)
+	}
 	return t
 }
 func (s *Counter_Struct) Capnp(seg *C.Segment) Counter {
@@ -6771,7 +6848,11 @@ func (s Zserver) LoadStruct(t *Zserver_Struct) {
 func (s *Zserver_Struct) Copy() *Zserver_Struct {
 	t := &Zserver_Struct{}
 	for _, e := range s.Waitingjobs {
-		t.Waitingjobs = append(t.Waitingjobs, e)
+		if e != nil {
+			t.Waitingjobs = append(t.Waitingjobs, e.Copy())
+		} else {
+			t.Waitingjobs = append(t.Waitingjobs, nil)
+		}
 	}
 	return t
 }
@@ -7030,6 +7111,9 @@ func (s Zjob) LoadStruct(t *Zjob_Struct) {
 func (s *Zjob_Struct) Copy() *Zjob_Struct {
 	t := &Zjob_Struct{}
 	t.Cmd = s.Cmd
+	for _, e := range s.Args {
+		t.Args = append(t.Args, e)
+	}
 	return t
 }
 func (s *Zjob_Struct) Capnp(seg *C.Segment) Zjob {
@@ -8830,7 +8914,9 @@ func (s VerTwoDataTwoPtr) LitName() string {
 
 type HoldsVerEmptyList C.Struct
 
-func NewHoldsVerEmptyList(s *C.Segment) HoldsVerEmptyList { return HoldsVerEmptyList(s.NewStruct(0, 1)) }
+func NewHoldsVerEmptyList(s *C.Segment) HoldsVerEmptyList {
+	return HoldsVerEmptyList(s.NewStruct(0, 1))
+}
 func NewRootHoldsVerEmptyList(s *C.Segment) HoldsVerEmptyList {
 	return HoldsVerEmptyList(s.NewRootStruct(0, 1))
 }
@@ -8888,7 +8974,11 @@ func (s HoldsVerEmptyList) LoadStruct(t *HoldsVerEmptyList_Struct) {
 func (s *HoldsVerEmptyList_Struct) Copy() *HoldsVerEmptyList_Struct {
 	t := &HoldsVerEmptyList_Struct{}
 	for _, e := range s.Mylist {
-		t.Mylist = append(t.Mylist, e)
+		if e != nil {
+			t.Mylist = append(t.Mylist, e.Copy())
+		} else {
+			t.Mylist = append(t.Mylist, nil)
+		}
 	}
 	return t
 }
@@ -9158,7 +9248,11 @@ func (s HoldsVerOneDataList) LoadStruct(t *HoldsVerOneDataList_Struct) {
 func (s *HoldsVerOneDataList_Struct) Copy() *HoldsVerOneDataList_Struct {
 	t := &HoldsVerOneDataList_Struct{}
 	for _, e := range s.Mylist {
-		t.Mylist = append(t.Mylist, e)
+		if e != nil {
+			t.Mylist = append(t.Mylist, e.Copy())
+		} else {
+			t.Mylist = append(t.Mylist, nil)
+		}
 	}
 	return t
 }
@@ -9428,7 +9522,11 @@ func (s HoldsVerTwoDataList) LoadStruct(t *HoldsVerTwoDataList_Struct) {
 func (s *HoldsVerTwoDataList_Struct) Copy() *HoldsVerTwoDataList_Struct {
 	t := &HoldsVerTwoDataList_Struct{}
 	for _, e := range s.Mylist {
-		t.Mylist = append(t.Mylist, e)
+		if e != nil {
+			t.Mylist = append(t.Mylist, e.Copy())
+		} else {
+			t.Mylist = append(t.Mylist, nil)
+		}
 	}
 	return t
 }
@@ -9696,7 +9794,11 @@ func (s HoldsVerOnePtrList) LoadStruct(t *HoldsVerOnePtrList_Struct) {
 func (s *HoldsVerOnePtrList_Struct) Copy() *HoldsVerOnePtrList_Struct {
 	t := &HoldsVerOnePtrList_Struct{}
 	for _, e := range s.Mylist {
-		t.Mylist = append(t.Mylist, e)
+		if e != nil {
+			t.Mylist = append(t.Mylist, e.Copy())
+		} else {
+			t.Mylist = append(t.Mylist, nil)
+		}
 	}
 	return t
 }
@@ -9964,7 +10066,11 @@ func (s HoldsVerTwoPtrList) LoadStruct(t *HoldsVerTwoPtrList_Struct) {
 func (s *HoldsVerTwoPtrList_Struct) Copy() *HoldsVerTwoPtrList_Struct {
 	t := &HoldsVerTwoPtrList_Struct{}
 	for _, e := range s.Mylist {
-		t.Mylist = append(t.Mylist, e)
+		if e != nil {
+			t.Mylist = append(t.Mylist, e.Copy())
+		} else {
+			t.Mylist = append(t.Mylist, nil)
+		}
 	}
 	return t
 }
@@ -10234,7 +10340,11 @@ func (s HoldsVerTwoTwoList) LoadStruct(t *HoldsVerTwoTwoList_Struct) {
 func (s *HoldsVerTwoTwoList_Struct) Copy() *HoldsVerTwoTwoList_Struct {
 	t := &HoldsVerTwoTwoList_Struct{}
 	for _, e := range s.Mylist {
-		t.Mylist = append(t.Mylist, e)
+		if e != nil {
+			t.Mylist = append(t.Mylist, e.Copy())
+		} else {
+			t.Mylist = append(t.Mylist, nil)
+		}
 	}
 	return t
 }
@@ -10504,7 +10614,11 @@ func (s HoldsVerTwoTwoPlus) LoadStruct(t *HoldsVerTwoTwoPlus_Struct) {
 func (s *HoldsVerTwoTwoPlus_Struct) Copy() *HoldsVerTwoTwoPlus_Struct {
 	t := &HoldsVerTwoTwoPlus_Struct{}
 	for _, e := range s.Mylist {
-		t.Mylist = append(t.Mylist, e)
+		if e != nil {
+			t.Mylist = append(t.Mylist, e.Copy())
+		} else {
+			t.Mylist = append(t.Mylist, nil)
+		}
 	}
 	return t
 }
@@ -10810,6 +10924,9 @@ func (s *VerTwoTwoPlus_Struct) Copy() *VerTwoTwoPlus_Struct {
 		t.Ptr2 = s.Ptr2.Copy()
 	}
 	t.Tre = s.Tre
+	for _, e := range s.Lst3 {
+		t.Lst3 = append(t.Lst3, e)
+	}
 	return t
 }
 func (s *VerTwoTwoPlus_Struct) Capnp(seg *C.Segment) VerTwoTwoPlus {
@@ -11330,6 +11447,12 @@ func (s HoldsText) LoadStruct(t *HoldsText_Struct) {
 func (s *HoldsText_Struct) Copy() *HoldsText_Struct {
 	t := &HoldsText_Struct{}
 	t.Txt = s.Txt
+	for _, e := range s.Lst {
+		t.Lst = append(t.Lst, e)
+	}
+	for _, e := range s.Lstlst {
+		t.Lstlst = append(t.Lstlst, e)
+	}
 	return t
 }
 func (s *HoldsText_Struct) Capnp(seg *C.Segment) HoldsText {
@@ -12081,8 +12204,10 @@ type Wrap2x2plus_List C.PointerList
 func NewWrap2x2plusList(s *C.Segment, sz int) Wrap2x2plus_List {
 	return Wrap2x2plus_List(s.NewCompositeList(0, 1, sz))
 }
-func (s Wrap2x2plus_List) Len() int             { return C.PointerList(s).Len() }
-func (s Wrap2x2plus_List) At(i int) Wrap2x2plus { return Wrap2x2plus(C.PointerList(s).At(i).ToStruct()) }
+func (s Wrap2x2plus_List) Len() int { return C.PointerList(s).Len() }
+func (s Wrap2x2plus_List) At(i int) Wrap2x2plus {
+	return Wrap2x2plus(C.PointerList(s).At(i).ToStruct())
+}
 func (s Wrap2x2plus_List) ToArray() []Wrap2x2plus {
 	n := s.Len()
 	a := make([]Wrap2x2plus, n)
@@ -12872,8 +12997,10 @@ type Nester1Capn_List C.PointerList
 func NewNester1CapnList(s *C.Segment, sz int) Nester1Capn_List {
 	return Nester1Capn_List(s.NewCompositeList(0, 1, sz))
 }
-func (s Nester1Capn_List) Len() int             { return C.PointerList(s).Len() }
-func (s Nester1Capn_List) At(i int) Nester1Capn { return Nester1Capn(C.PointerList(s).At(i).ToStruct()) }
+func (s Nester1Capn_List) Len() int { return C.PointerList(s).Len() }
+func (s Nester1Capn_List) At(i int) Nester1Capn {
+	return Nester1Capn(C.PointerList(s).At(i).ToStruct())
+}
 func (s Nester1Capn_List) ToArray() []Nester1Capn {
 	n := s.Len()
 	a := make([]Nester1Capn, n)
@@ -12906,7 +13033,9 @@ func (s Nester1Capn) LoadStruct(t *Nester1Capn_Struct) {
 }
 func (s *Nester1Capn_Struct) Copy() *Nester1Capn_Struct {
 	t := &Nester1Capn_Struct{}
-
+	for _, e := range s.Strs {
+		t.Strs = append(t.Strs, e)
+	}
 	return t
 }
 func (s *Nester1Capn_Struct) Capnp(seg *C.Segment) Nester1Capn {
@@ -13168,7 +13297,9 @@ func (s RWTestCapn) LoadStruct(t *RWTestCapn_Struct) {
 }
 func (s *RWTestCapn_Struct) Copy() *RWTestCapn_Struct {
 	t := &RWTestCapn_Struct{}
-
+	for _, e := range s.NestMatrix {
+		t.NestMatrix = append(t.NestMatrix, e)
+	}
 	return t
 }
 func (s *RWTestCapn_Struct) Capnp(seg *C.Segment) RWTestCapn {
@@ -13382,7 +13513,11 @@ func (s ListStructCapn) LoadStruct(t *ListStructCapn_Struct) {
 func (s *ListStructCapn_Struct) Copy() *ListStructCapn_Struct {
 	t := &ListStructCapn_Struct{}
 	for _, e := range s.Vec {
-		t.Vec = append(t.Vec, e)
+		if e != nil {
+			t.Vec = append(t.Vec, e.Copy())
+		} else {
+			t.Vec = append(t.Vec, nil)
+		}
 	}
 	return t
 }

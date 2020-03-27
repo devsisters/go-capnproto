@@ -542,13 +542,23 @@ func (t Type) goStructFuncCopy(root *node, fieldName string) string {
 		if t.List().ElementType().Which() == TYPE_STRUCT {
 			writeTemplate(&sb, `
 				for _, e := range s.{{.name}} {
-					t.{{.name}} = append(t.{{.name}}, e)
+                    if e != nil {
+						t.{{.name}} = append(t.{{.name}}, e.Copy())
+                    } else {
+						t.{{.name}} = append(t.{{.name}}, nil)
+					}
 				};
 			`, map[string]interface{}{
 				"name": title(fieldName),
 			})
 		} else {
-
+			writeTemplate(&sb, `
+				for _, e := range s.{{.name}} {
+					t.{{.name}} = append(t.{{.name}}, e)
+				};
+			`, map[string]interface{}{
+				"name": title(fieldName),
+			})
 		}
 		return sb.String()
 	default:
