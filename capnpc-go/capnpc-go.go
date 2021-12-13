@@ -717,6 +717,7 @@ func (n *node) defineStructEnums(w io.Writer) {
 	assert(n.Which() == NODE_STRUCT, "invalid struct node")
 
 	if n.Struct().DiscriminantCount() > 0 {
+		g_imported["fmt"] = true
 		fprintf(w, "type %s_Which uint16\n", n.name)
 		fprintf(w, "const (\n")
 
@@ -741,7 +742,7 @@ func (n *node) defineStructEnums(w io.Writer) {
 				}
 			}
 		}
-		fprintf(w, "default: return \"\"\n")
+		fprintf(w, "default: panic(fmt.Errorf(\"invalid struct enum %%d\", c))\n")
 		fprintf(w, "}\n}\n\n")
 
 		fprintf(w, "func %sFromString(c string) %s_Which {\n", n.name, n.name)
@@ -756,7 +757,7 @@ func (n *node) defineStructEnums(w io.Writer) {
 				}
 			}
 		}
-		fprintf(w, "default: return 0\n")
+		fprintf(w, "default: panic(fmt.Errorf(\"invalid struct enum %%s\", c))\n")
 		fprintf(w, "}\n}\n")
 	}
 
