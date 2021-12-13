@@ -2463,6 +2463,35 @@ const (
 	AIRCRAFT_F16  Aircraft_Which = 3
 )
 
+func (c Aircraft_Which) String() string {
+	switch c {
+	case AIRCRAFT_VOID:
+		return "void"
+	case AIRCRAFT_B737:
+		return "b737"
+	case AIRCRAFT_A320:
+		return "a320"
+	case AIRCRAFT_F16:
+		return "f16"
+	default:
+		return ""
+	}
+}
+
+func AircraftFromString(c string) Aircraft_Which {
+	switch c {
+	case "void":
+		return AIRCRAFT_VOID
+	case "b737":
+		return AIRCRAFT_B737
+	case "a320":
+		return AIRCRAFT_A320
+	case "f16":
+		return AIRCRAFT_F16
+	default:
+		return 0
+	}
+}
 func NewAircraft(s *C.Segment) Aircraft      { return Aircraft(s.NewStruct(8, 1)) }
 func NewRootAircraft(s *C.Segment) Aircraft  { return Aircraft(s.NewRootStruct(8, 1)) }
 func AutoNewAircraft(s *C.Segment) Aircraft  { return Aircraft(s.NewStructAR(8, 1)) }
@@ -2848,48 +2877,226 @@ type Z C.Struct
 type Z_Which uint16
 
 const (
-	Z_VOID        Z_Which = 0
-	Z_ZZ          Z_Which = 1
-	Z_F64         Z_Which = 2
-	Z_F32         Z_Which = 3
-	Z_I64         Z_Which = 4
-	Z_I32         Z_Which = 5
-	Z_I16         Z_Which = 6
-	Z_I8          Z_Which = 7
-	Z_U64         Z_Which = 8
-	Z_U32         Z_Which = 9
-	Z_U16         Z_Which = 10
-	Z_U8          Z_Which = 11
-	Z_BOOL        Z_Which = 12
-	Z_TEXT        Z_Which = 13
-	Z_BLOB        Z_Which = 14
-	Z_F64VEC      Z_Which = 15
-	Z_F32VEC      Z_Which = 16
-	Z_I64VEC      Z_Which = 17
-	Z_I32VEC      Z_Which = 18
-	Z_I16VEC      Z_Which = 19
-	Z_I8VEC       Z_Which = 20
-	Z_U64VEC      Z_Which = 21
-	Z_U32VEC      Z_Which = 22
-	Z_U16VEC      Z_Which = 23
-	Z_U8VEC       Z_Which = 24
-	Z_ZVEC        Z_Which = 25
-	Z_ZVECVEC     Z_Which = 26
-	Z_ZDATE       Z_Which = 27
-	Z_ZDATA       Z_Which = 28
-	Z_AIRCRAFTVEC Z_Which = 29
-	Z_AIRCRAFT    Z_Which = 30
-	Z_REGRESSION  Z_Which = 31
-	Z_PLANEBASE   Z_Which = 32
-	Z_AIRPORT     Z_Which = 33
-	Z_B737        Z_Which = 34
-	Z_A320        Z_Which = 35
-	Z_F16         Z_Which = 36
-	Z_ZDATEVEC    Z_Which = 37
-	Z_ZDATAVEC    Z_Which = 38
-	Z_BOOLVEC     Z_Which = 39
+	Z_VOID            Z_Which = 0
+	Z_ZZ              Z_Which = 1
+	Z_F64             Z_Which = 2
+	Z_F32             Z_Which = 3
+	Z_I64             Z_Which = 4
+	Z_I32             Z_Which = 5
+	Z_I16             Z_Which = 6
+	Z_I8              Z_Which = 7
+	Z_U64             Z_Which = 8
+	Z_U32             Z_Which = 9
+	Z_U16             Z_Which = 10
+	Z_U8              Z_Which = 11
+	Z_BOOL            Z_Which = 12
+	Z_TEXT            Z_Which = 13
+	Z_BLOB            Z_Which = 14
+	Z_F64VEC          Z_Which = 15
+	Z_F32VEC          Z_Which = 16
+	Z_I64VEC          Z_Which = 17
+	Z_I32VEC          Z_Which = 18
+	Z_I16VEC          Z_Which = 19
+	Z_I8VEC           Z_Which = 20
+	Z_U64VEC          Z_Which = 21
+	Z_U32VEC          Z_Which = 22
+	Z_U16VEC          Z_Which = 23
+	Z_U8VEC           Z_Which = 24
+	Z_ZVEC            Z_Which = 25
+	Z_ZVECVEC         Z_Which = 26
+	Z_ZDATE           Z_Which = 27
+	Z_ZDATA           Z_Which = 28
+	Z_AIRCRAFTVEC     Z_Which = 29
+	Z_AIRCRAFT        Z_Which = 30
+	Z_REGRESSION      Z_Which = 31
+	Z_PLANEBASE       Z_Which = 32
+	Z_AIRPORT         Z_Which = 33
+	Z_B737            Z_Which = 34
+	Z_A320            Z_Which = 35
+	Z_F16             Z_Which = 36
+	Z_ZDATEVEC        Z_Which = 37
+	Z_ZDATAVEC        Z_Which = 38
+	Z_BOOLVEC         Z_Which = 39
+	Z_POWERFULAIRPORT Z_Which = 40
 )
 
+func (c Z_Which) String() string {
+	switch c {
+	case Z_VOID:
+		return "void"
+	case Z_ZZ:
+		return "zz"
+	case Z_F64:
+		return "f64"
+	case Z_F32:
+		return "f32"
+	case Z_I64:
+		return "i64"
+	case Z_I32:
+		return "i32"
+	case Z_I16:
+		return "i16"
+	case Z_I8:
+		return "i8"
+	case Z_U64:
+		return "u64"
+	case Z_U32:
+		return "u32"
+	case Z_U16:
+		return "u16"
+	case Z_U8:
+		return "u8"
+	case Z_BOOL:
+		return "bool"
+	case Z_TEXT:
+		return "text"
+	case Z_BLOB:
+		return "blob"
+	case Z_F64VEC:
+		return "f64vec"
+	case Z_F32VEC:
+		return "f32vec"
+	case Z_I64VEC:
+		return "i64vec"
+	case Z_I32VEC:
+		return "i32vec"
+	case Z_I16VEC:
+		return "i16vec"
+	case Z_I8VEC:
+		return "i8vec"
+	case Z_U64VEC:
+		return "u64vec"
+	case Z_U32VEC:
+		return "u32vec"
+	case Z_U16VEC:
+		return "u16vec"
+	case Z_U8VEC:
+		return "u8vec"
+	case Z_ZVEC:
+		return "zvec"
+	case Z_ZVECVEC:
+		return "zvecvec"
+	case Z_ZDATE:
+		return "zdate"
+	case Z_ZDATA:
+		return "zdata"
+	case Z_AIRCRAFTVEC:
+		return "aircraftvec"
+	case Z_AIRCRAFT:
+		return "aircraft"
+	case Z_REGRESSION:
+		return "regression"
+	case Z_PLANEBASE:
+		return "planebase"
+	case Z_AIRPORT:
+		return "airport"
+	case Z_B737:
+		return "b737"
+	case Z_A320:
+		return "a320"
+	case Z_F16:
+		return "f16"
+	case Z_ZDATEVEC:
+		return "zdatevec"
+	case Z_ZDATAVEC:
+		return "zdatavec"
+	case Z_BOOLVEC:
+		return "boolvec"
+	case Z_POWERFULAIRPORT:
+		return "powerfulAirport"
+	default:
+		return ""
+	}
+}
+
+func ZFromString(c string) Z_Which {
+	switch c {
+	case "void":
+		return Z_VOID
+	case "zz":
+		return Z_ZZ
+	case "f64":
+		return Z_F64
+	case "f32":
+		return Z_F32
+	case "i64":
+		return Z_I64
+	case "i32":
+		return Z_I32
+	case "i16":
+		return Z_I16
+	case "i8":
+		return Z_I8
+	case "u64":
+		return Z_U64
+	case "u32":
+		return Z_U32
+	case "u16":
+		return Z_U16
+	case "u8":
+		return Z_U8
+	case "bool":
+		return Z_BOOL
+	case "text":
+		return Z_TEXT
+	case "blob":
+		return Z_BLOB
+	case "f64vec":
+		return Z_F64VEC
+	case "f32vec":
+		return Z_F32VEC
+	case "i64vec":
+		return Z_I64VEC
+	case "i32vec":
+		return Z_I32VEC
+	case "i16vec":
+		return Z_I16VEC
+	case "i8vec":
+		return Z_I8VEC
+	case "u64vec":
+		return Z_U64VEC
+	case "u32vec":
+		return Z_U32VEC
+	case "u16vec":
+		return Z_U16VEC
+	case "u8vec":
+		return Z_U8VEC
+	case "zvec":
+		return Z_ZVEC
+	case "zvecvec":
+		return Z_ZVECVEC
+	case "zdate":
+		return Z_ZDATE
+	case "zdata":
+		return Z_ZDATA
+	case "aircraftvec":
+		return Z_AIRCRAFTVEC
+	case "aircraft":
+		return Z_AIRCRAFT
+	case "regression":
+		return Z_REGRESSION
+	case "planebase":
+		return Z_PLANEBASE
+	case "airport":
+		return Z_AIRPORT
+	case "b737":
+		return Z_B737
+	case "a320":
+		return Z_A320
+	case "f16":
+		return Z_F16
+	case "zdatevec":
+		return Z_ZDATEVEC
+	case "zdatavec":
+		return Z_ZDATAVEC
+	case "boolvec":
+		return Z_BOOLVEC
+	case "powerfulAirport":
+		return Z_POWERFULAIRPORT
+	default:
+		return 0
+	}
+}
 func NewZ(s *C.Segment) Z      { return Z(s.NewStruct(16, 1)) }
 func NewRootZ(s *C.Segment) Z  { return Z(s.NewRootStruct(16, 1)) }
 func AutoNewZ(s *C.Segment) Z  { return Z(s.NewStructAR(16, 1)) }
@@ -2980,22 +3187,24 @@ func (s Z) SetRegression(v Regression) {
 	C.Struct(s).Set16(0, 31)
 	C.Struct(s).SetObject(0, C.Object(v))
 }
-func (s Z) Planebase() PlaneBase     { return PlaneBase(C.Struct(s).GetObject(0).ToStruct()) }
-func (s Z) SetPlanebase(v PlaneBase) { C.Struct(s).Set16(0, 32); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) Airport() Airport         { return Airport(C.Struct(s).Get16(8)) }
-func (s Z) SetAirport(v Airport)     { C.Struct(s).Set16(0, 33); C.Struct(s).Set16(8, uint16(v)) }
-func (s Z) B737() B737               { return B737(C.Struct(s).GetObject(0).ToStruct()) }
-func (s Z) SetB737(v B737)           { C.Struct(s).Set16(0, 34); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) A320() A320               { return A320(C.Struct(s).GetObject(0).ToStruct()) }
-func (s Z) SetA320(v A320)           { C.Struct(s).Set16(0, 35); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) F16() F16                 { return F16(C.Struct(s).GetObject(0).ToStruct()) }
-func (s Z) SetF16(v F16)             { C.Struct(s).Set16(0, 36); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) Zdatevec() Zdate_List     { return Zdate_List(C.Struct(s).GetObject(0)) }
-func (s Z) SetZdatevec(v Zdate_List) { C.Struct(s).Set16(0, 37); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) Zdatavec() Zdata_List     { return Zdata_List(C.Struct(s).GetObject(0)) }
-func (s Z) SetZdatavec(v Zdata_List) { C.Struct(s).Set16(0, 38); C.Struct(s).SetObject(0, C.Object(v)) }
-func (s Z) Boolvec() C.BitList       { return C.BitList(C.Struct(s).GetObject(0)) }
-func (s Z) SetBoolvec(v C.BitList)   { C.Struct(s).Set16(0, 39); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) Planebase() PlaneBase         { return PlaneBase(C.Struct(s).GetObject(0).ToStruct()) }
+func (s Z) SetPlanebase(v PlaneBase)     { C.Struct(s).Set16(0, 32); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) Airport() Airport             { return Airport(C.Struct(s).Get16(8)) }
+func (s Z) SetAirport(v Airport)         { C.Struct(s).Set16(0, 33); C.Struct(s).Set16(8, uint16(v)) }
+func (s Z) B737() B737                   { return B737(C.Struct(s).GetObject(0).ToStruct()) }
+func (s Z) SetB737(v B737)               { C.Struct(s).Set16(0, 34); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) A320() A320                   { return A320(C.Struct(s).GetObject(0).ToStruct()) }
+func (s Z) SetA320(v A320)               { C.Struct(s).Set16(0, 35); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) F16() F16                     { return F16(C.Struct(s).GetObject(0).ToStruct()) }
+func (s Z) SetF16(v F16)                 { C.Struct(s).Set16(0, 36); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) Zdatevec() Zdate_List         { return Zdate_List(C.Struct(s).GetObject(0)) }
+func (s Z) SetZdatevec(v Zdate_List)     { C.Struct(s).Set16(0, 37); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) Zdatavec() Zdata_List         { return Zdata_List(C.Struct(s).GetObject(0)) }
+func (s Z) SetZdatavec(v Zdata_List)     { C.Struct(s).Set16(0, 38); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) Boolvec() C.BitList           { return C.BitList(C.Struct(s).GetObject(0)) }
+func (s Z) SetBoolvec(v C.BitList)       { C.Struct(s).Set16(0, 39); C.Struct(s).SetObject(0, C.Object(v)) }
+func (s Z) PowerfulAirport() Airport     { return Airport(C.Struct(s).Get16(8)) }
+func (s Z) SetPowerfulAirport(v Airport) { C.Struct(s).Set16(0, 40); C.Struct(s).Set16(8, uint16(v)) }
 
 type Z_List C.PointerList
 
@@ -3013,46 +3222,47 @@ func (s Z_List) ToArray() []Z {
 func (s Z_List) Set(i int, item Z) { C.PointerList(s).Set(i, C.Object(item)) }
 
 type Z_Struct struct {
-	Which       Z_Which
-	Zz          *Z_Struct
-	F64         float64
-	F32         float32
-	I64         int64
-	I32         int32
-	I16         int16
-	I8          int8
-	U64         uint64
-	U32         uint32
-	U16         uint16
-	U8          uint8
-	Bool        bool
-	Text        string
-	Blob        []byte
-	F64vec      []float64
-	F32vec      []float32
-	I64vec      []int64
-	I32vec      []int32
-	I16vec      []int16
-	I8vec       []int8
-	U64vec      []uint64
-	U32vec      []uint32
-	U16vec      []uint16
-	U8vec       []uint8
-	Zvec        []*Z_Struct
-	Zvecvec     [][]*Z_Struct
-	Zdate       *Zdate_Struct
-	Zdata       *Zdata_Struct
-	Aircraftvec []*Aircraft_Struct
-	Aircraft    *Aircraft_Struct
-	Regression  *Regression_Struct
-	Planebase   *PlaneBase_Struct
-	Airport     Airport
-	B737        *B737_Struct
-	A320        *A320_Struct
-	F16         *F16_Struct
-	Zdatevec    []*Zdate_Struct
-	Zdatavec    []*Zdata_Struct
-	Boolvec     []bool
+	Which           Z_Which
+	Zz              *Z_Struct
+	F64             float64
+	F32             float32
+	I64             int64
+	I32             int32
+	I16             int16
+	I8              int8
+	U64             uint64
+	U32             uint32
+	U16             uint16
+	U8              uint8
+	Bool            bool
+	Text            string
+	Blob            []byte
+	F64vec          []float64
+	F32vec          []float32
+	I64vec          []int64
+	I32vec          []int32
+	I16vec          []int16
+	I8vec           []int8
+	U64vec          []uint64
+	U32vec          []uint32
+	U16vec          []uint16
+	U8vec           []uint8
+	Zvec            []*Z_Struct
+	Zvecvec         [][]*Z_Struct
+	Zdate           *Zdate_Struct
+	Zdata           *Zdata_Struct
+	Aircraftvec     []*Aircraft_Struct
+	Aircraft        *Aircraft_Struct
+	Regression      *Regression_Struct
+	Planebase       *PlaneBase_Struct
+	Airport         Airport
+	B737            *B737_Struct
+	A320            *A320_Struct
+	F16             *F16_Struct
+	Zdatevec        []*Zdate_Struct
+	Zdatavec        []*Zdata_Struct
+	Boolvec         []bool
+	PowerfulAirport Airport
 }
 
 func (s Z) Struct() *Z_Struct {
@@ -3229,6 +3439,9 @@ func (s Z) Struct() *Z_Struct {
 		for i := 0; i < s.Boolvec().Len(); i++ {
 			t.Boolvec = append(t.Boolvec, s.Boolvec().At(i))
 		}
+	}
+	if t.Which == Z_POWERFULAIRPORT {
+		t.PowerfulAirport = s.PowerfulAirport()
 	}
 	return t
 }
@@ -3440,6 +3653,9 @@ func (s Z) LoadStruct(t *Z_Struct) {
 			s.Boolvec().Set(i, t.Boolvec[i])
 		}
 	}
+	if t.Which == Z_POWERFULAIRPORT {
+		s.SetPowerfulAirport(t.PowerfulAirport)
+	}
 }
 func (s *Z_Struct) Copy() *Z_Struct {
 	t := &Z_Struct{}
@@ -3549,6 +3765,7 @@ func (s *Z_Struct) Copy() *Z_Struct {
 	for _, e := range s.Boolvec {
 		t.Boolvec = append(t.Boolvec, e)
 	}
+	t.PowerfulAirport = s.PowerfulAirport
 	return t
 }
 func (s *Z_Struct) Capnp(seg *C.Segment) Z {
@@ -4744,6 +4961,26 @@ func (s Z) WriteJSON(w io.Writer) error {
 				}
 			}
 		}
+		if s.Which() == Z_POWERFULAIRPORT {
+			if !isFirstField {
+				err = b.WriteByte(',')
+			}
+			isFirstField = false
+			if err != nil {
+				return err
+			}
+			_, err = b.WriteString("\"powerfulAirport\":")
+			if err != nil {
+				return err
+			}
+			{
+				s := s.PowerfulAirport()
+				err = s.WriteJSON(b)
+				if err != nil {
+					return err
+				}
+			}
+		}
 		err = b.WriteByte('}')
 	}
 	if err != nil {
@@ -5651,6 +5888,19 @@ func (s Z) WriteCapLit(w io.Writer) error {
 			}
 		}
 	}
+	if s.Which() == Z_POWERFULAIRPORT {
+		_, err = b.WriteString("powerfulAirport = ")
+		if err != nil {
+			return err
+		}
+		{
+			s := s.PowerfulAirport()
+			err = s.WriteCapLit(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
 	err = b.WriteByte(')')
 	if err != nil {
 		return err
@@ -6172,6 +6422,16 @@ func (s Z) UnmarshalCapLitNode(n *C.CapLitNode) error {
 			t.Set(i, ev)
 		}
 		s.SetBoolvec(t)
+	}
+	if fn, ok := sv["powerfulAirport"]; ok {
+		_ = fn
+		fv, ok := fn.Val.(string)
+		if !ok {
+			return fmt.Errorf("expected 'string' but didn't matched")
+		}
+		_ = fv
+		t := AirportFromString(fv)
+		s.SetPowerfulAirport(t)
 	}
 	return err
 }
@@ -12745,6 +13005,27 @@ const (
 	VOIDUNION_B VoidUnion_Which = 1
 )
 
+func (c VoidUnion_Which) String() string {
+	switch c {
+	case VOIDUNION_A:
+		return "a"
+	case VOIDUNION_B:
+		return "b"
+	default:
+		return ""
+	}
+}
+
+func VoidUnionFromString(c string) VoidUnion_Which {
+	switch c {
+	case "a":
+		return VOIDUNION_A
+	case "b":
+		return VOIDUNION_B
+	default:
+		return 0
+	}
+}
 func NewVoidUnion(s *C.Segment) VoidUnion      { return VoidUnion(s.NewStruct(8, 0)) }
 func NewRootVoidUnion(s *C.Segment) VoidUnion  { return VoidUnion(s.NewRootStruct(8, 0)) }
 func AutoNewVoidUnion(s *C.Segment) VoidUnion  { return VoidUnion(s.NewStructAR(8, 0)) }

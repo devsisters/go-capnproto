@@ -724,10 +724,40 @@ func (n *node) defineStructEnums(w io.Writer) {
 			if f.DiscriminantValue() == 0xFFFF {
 				// Non-union member
 			} else {
-				fprintf(w, "%s_%s %s_Which = %d\n", strings.ToUpper(n.name), strings.ToUpper(f.Name()), n.name, f.DiscriminantValue())
+				fprintf(w, "%s %s_Which = %d\n", structEnumFullName(n, f), n.name, f.DiscriminantValue())
 			}
 		}
 		fprintf(w, ")\n")
+
+		fprintf(w, "func (c %s_Which) String() string {\n", n.name)
+		fprintf(w, "switch c {\n")
+		for _, f := range n.codeOrderFields() {
+			if f.DiscriminantValue() == 0xFFFF {
+				// Non-union member
+			} else {
+				etag := structEnumTag(f)
+				if etag != "" {
+					fprintf(w, "case %s: return \"%s\"\n", structEnumFullName(n, f), structEnumTag(f))
+				}
+			}
+		}
+		fprintf(w, "default: return \"\"\n")
+		fprintf(w, "}\n}\n\n")
+
+		fprintf(w, "func %sFromString(c string) %s_Which {\n", n.name, n.name)
+		fprintf(w, "switch c {\n")
+		for _, f := range n.codeOrderFields() {
+			if f.DiscriminantValue() == 0xFFFF {
+				// Non-union member
+			} else {
+				etag := structEnumTag(f)
+				if etag != "" {
+					fprintf(w, "case \"%s\": return %s\n", structEnumTag(f), structEnumFullName(n, f))
+				}
+			}
+		}
+		fprintf(w, "default: return 0\n")
+		fprintf(w, "}\n}\n")
 	}
 
 	for _, f := range n.codeOrderFields() {
@@ -735,6 +765,14 @@ func (n *node) defineStructEnums(w io.Writer) {
 			findNode(f.Group().TypeId()).defineStructEnums(w)
 		}
 	}
+}
+
+func structEnumFullName(strtNode *node, f Field) string {
+	return fmt.Sprintf("%s_%s", strings.ToUpper(strtNode.name), strings.ToUpper(f.Name()))
+}
+
+func structEnumTag(f Field) string {
+	return f.Name()
 }
 
 func (n *node) defineStructFuncs(w io.Writer) {

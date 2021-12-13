@@ -132,6 +132,7 @@ struct Z {
     zdatavec          @38: List(Zdata);
 
     boolvec           @39: List(Bool);
+    powerfulAirport   @40: Airport;
   }
 }
 
