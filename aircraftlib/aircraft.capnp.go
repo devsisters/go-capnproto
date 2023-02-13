@@ -11,6 +11,7 @@ import (
 	"io"
 	"math"
 	"net"
+	"strconv"
 )
 
 type Zdate C.Struct
@@ -925,9 +926,13 @@ func (s PlaneBase) WriteJSON(w io.Writer) error {
 		}
 		{
 			s := s.MaxSpeed()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
+			if float64(s) == float64(int64(s)) {
+				buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64)
+			} else {
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
 			}
 			_, err = b.Write(buf)
 			if err != nil {
@@ -2018,9 +2023,13 @@ func (s Regression) WriteJSON(w io.Writer) error {
 		}
 		{
 			s := s.B0()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
+			if float64(s) == float64(int64(s)) {
+				buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64)
+			} else {
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
 			}
 			_, err = b.Write(buf)
 			if err != nil {
@@ -2052,9 +2061,13 @@ func (s Regression) WriteJSON(w io.Writer) error {
 					if err != nil {
 						return err
 					}
-					buf, err = json.Marshal(s)
-					if err != nil {
-						return err
+					if float64(s) == float64(int64(s)) {
+						buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64)
+					} else {
+						buf, err = json.Marshal(s)
+						if err != nil {
+							return err
+						}
 					}
 					_, err = b.Write(buf)
 					if err != nil {
@@ -2116,9 +2129,13 @@ func (s Regression) WriteJSON(w io.Writer) error {
 		}
 		{
 			s := s.Ymu()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
+			if float64(s) == float64(int64(s)) {
+				buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64)
+			} else {
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
 			}
 			_, err = b.Write(buf)
 			if err != nil {
@@ -2138,9 +2155,13 @@ func (s Regression) WriteJSON(w io.Writer) error {
 		}
 		{
 			s := s.Ysd()
-			buf, err = json.Marshal(s)
-			if err != nil {
-				return err
+			if float64(s) == float64(int64(s)) {
+				buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64)
+			} else {
+				buf, err = json.Marshal(s)
+				if err != nil {
+					return err
+				}
 			}
 			_, err = b.Write(buf)
 			if err != nil {
@@ -2474,7 +2495,7 @@ func (c Aircraft_Which) String() string {
 	case AIRCRAFT_F16:
 		return "f16"
 	default:
-		return ""
+		panic(fmt.Errorf("invalid struct enum %d", c))
 	}
 }
 
@@ -2489,7 +2510,7 @@ func AircraftFromString(c string) Aircraft_Which {
 	case "f16":
 		return AIRCRAFT_F16
 	default:
-		return 0
+		panic(fmt.Errorf("invalid struct enum %s", c))
 	}
 }
 func NewAircraft(s *C.Segment) Aircraft      { return Aircraft(s.NewStruct(8, 1)) }
@@ -3005,7 +3026,7 @@ func (c Z_Which) String() string {
 	case Z_POWERFULAIRPORT:
 		return "powerfulAirport"
 	default:
-		return ""
+		panic(fmt.Errorf("invalid struct enum %d", c))
 	}
 }
 
@@ -3094,7 +3115,7 @@ func ZFromString(c string) Z_Which {
 	case "powerfulAirport":
 		return Z_POWERFULAIRPORT
 	default:
-		return 0
+		panic(fmt.Errorf("invalid struct enum %s", c))
 	}
 }
 func NewZ(s *C.Segment) Z      { return Z(s.NewStruct(16, 1)) }
@@ -3848,9 +3869,13 @@ func (s Z) WriteJSON(w io.Writer) error {
 			}
 			{
 				s := s.F64()
-				buf, err = json.Marshal(s)
-				if err != nil {
-					return err
+				if float64(s) == float64(int64(s)) {
+					buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64)
+				} else {
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
 				}
 				_, err = b.Write(buf)
 				if err != nil {
@@ -3872,9 +3897,13 @@ func (s Z) WriteJSON(w io.Writer) error {
 			}
 			{
 				s := s.F32()
-				buf, err = json.Marshal(s)
-				if err != nil {
-					return err
+				if float64(s) == float64(int64(s)) {
+					buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64)
+				} else {
+					buf, err = json.Marshal(s)
+					if err != nil {
+						return err
+					}
 				}
 				_, err = b.Write(buf)
 				if err != nil {
@@ -4172,9 +4201,13 @@ func (s Z) WriteJSON(w io.Writer) error {
 						if err != nil {
 							return err
 						}
-						buf, err = json.Marshal(s)
-						if err != nil {
-							return err
+						if float64(s) == float64(int64(s)) {
+							buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64)
+						} else {
+							buf, err = json.Marshal(s)
+							if err != nil {
+								return err
+							}
 						}
 						_, err = b.Write(buf)
 						if err != nil {
@@ -4214,9 +4247,13 @@ func (s Z) WriteJSON(w io.Writer) error {
 						if err != nil {
 							return err
 						}
-						buf, err = json.Marshal(s)
-						if err != nil {
-							return err
+						if float64(s) == float64(int64(s)) {
+							buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64)
+						} else {
+							buf, err = json.Marshal(s)
+							if err != nil {
+								return err
+							}
 						}
 						_, err = b.Write(buf)
 						if err != nil {
@@ -13012,7 +13049,7 @@ func (c VoidUnion_Which) String() string {
 	case VOIDUNION_B:
 		return "b"
 	default:
-		return ""
+		panic(fmt.Errorf("invalid struct enum %d", c))
 	}
 }
 
@@ -13023,7 +13060,7 @@ func VoidUnionFromString(c string) VoidUnion_Which {
 	case "b":
 		return VOIDUNION_B
 	default:
-		return 0
+		panic(fmt.Errorf("invalid struct enum %s", c))
 	}
 }
 func NewVoidUnion(s *C.Segment) VoidUnion      { return VoidUnion(s.NewStruct(8, 0)) }

@@ -916,10 +916,18 @@ func (t Type) json(w io.Writer) {
 	switch t.Which() {
 	case TYPE_UINT8, TYPE_UINT16, TYPE_UINT32, TYPE_UINT64,
 		TYPE_INT8, TYPE_INT16, TYPE_INT32, TYPE_INT64,
-		TYPE_FLOAT32, TYPE_FLOAT64, TYPE_BOOL, TYPE_TEXT, TYPE_DATA:
+		TYPE_BOOL, TYPE_TEXT, TYPE_DATA:
 		g_imported["encoding/json"] = true
 		fprintf(w, "buf, err = json.Marshal(s);")
 		writeErrCheck(w)
+		fprintf(w, "_, err = b.Write(buf);")
+		writeErrCheck(w)
+	case TYPE_FLOAT32, TYPE_FLOAT64:
+		g_imported["encoding/json"] = true
+		g_imported["strconv"] = true
+		fprintf(w, "if float64(s) == float64(int64(s)) { buf = strconv.AppendFloat(buf[:0], float64(s), 'f', 1, 64) } else { buf, err = json.Marshal(s);")
+		writeErrCheck(w)
+		fprintf(w, "};")
 		fprintf(w, "_, err = b.Write(buf);")
 		writeErrCheck(w)
 	case TYPE_ENUM, TYPE_STRUCT:
