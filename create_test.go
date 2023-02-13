@@ -86,7 +86,7 @@ func TestCreationOfZData(t *testing.T) {
 	seg, _ := zdataFilledSegment(n)
 	text := CapnpDecodeSegment(seg, "", "aircraftlib/aircraft.capnp", "Z")
 
-	expectedText := `(zdata = (data = "\x00\x01\x02\x03\x04\x05\x06\a\b\t\n\v\f\r\x0e\x0f\x10\x11\x12\x13"))`
+	expectedText := `(zdata = (data = "\000\001\002\003\004\005\006\a\b\t\n\v\f\r\016\017\020\021\022\023"))`
 
 	cv.Convey("Given a go-capnproto created Zdata DATA element with n=20", t, func() {
 		cv.Convey("When we decode it with capnp", func() {

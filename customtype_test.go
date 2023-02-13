@@ -39,7 +39,7 @@ func TestCreationOfEndpoint(t *testing.T) {
 	seg, _ := ExampleCreateEndpoint()
 	text := CapnpDecodeSegment(seg, "", "aircraftlib/aircraft.capnp", "Endpoint")
 
-	expectedText := `(ip = "\x01\x02\x03\x04", port = 56, hostname = "test.com")`
+	expectedText := `(ip = "\001\002\003\004", port = 56, hostname = "test.com")`
 	expectedIP := net.IP([]byte{1, 2, 3, 4})
 	const expectedPort = 56
 	expectedHostname := "test.com"
