@@ -970,14 +970,16 @@ func (n *node) defineNewStructFunc(w io.Writer) {
 		datasz = n.Struct().DataWordCount() * 8
 		ptrs   = n.Struct().PointerCount()
 	)
-	fprintf(w, "func New%s(s *C.Segment) %s { return %s(s.NewStruct(%d, %d)) }\n",
-		n.name, n.name, n.name, datasz, ptrs)
-	fprintf(w, "func NewRoot%s(s *C.Segment) %s { return %s(s.NewRootStruct(%d, %d)) }\n",
-		n.name, n.name, n.name, datasz, ptrs)
-	fprintf(w, "func AutoNew%s(s *C.Segment) %s { return %s(s.NewStructAR(%d, %d)) }\n",
-		n.name, n.name, n.name, datasz, ptrs)
-	fprintf(w, "func ReadRoot%s(s *C.Segment) %s { return %s(s.Root(0).ToStruct()) }\n",
-		n.name, n.name, n.name)
+	if !disabledNewStruct {
+		fprintf(w, "func New%s(s *C.Segment) %s { return %s(s.NewStruct(%d, %d)) }\n",
+			n.name, n.name, n.name, datasz, ptrs)
+		fprintf(w, "func NewRoot%s(s *C.Segment) %s { return %s(s.NewRootStruct(%d, %d)) }\n",
+			n.name, n.name, n.name, datasz, ptrs)
+		fprintf(w, "func AutoNew%s(s *C.Segment) %s { return %s(s.NewStructAR(%d, %d)) }\n",
+			n.name, n.name, n.name, datasz, ptrs)
+		fprintf(w, "func ReadRoot%s(s *C.Segment) %s { return %s(s.Root(0).ToStruct()) }\n",
+			n.name, n.name, n.name)
+	}
 
 	if enabledStructInfo {
 		fprintf(w, "func (s *%s) StructInfo() (int, int) { return %d, %d }\n",
@@ -1026,6 +1028,7 @@ var (
 	disabledCaplitUnarshal = false
 	disabledUtil           = false
 	disabledBase           = false
+	disabledNewStruct      = false
 	enabledStructInfo      = false
 	ignorePrivateInfoField = false
 	privateInfoField       = map[string]bool{
@@ -1052,6 +1055,9 @@ func init() {
 	}
 	if disable, err := strconv.ParseBool(os.Getenv("GO_CAPNP_BASE_DISABLE")); err == nil {
 		disabledBase = disable
+	}
+	if enable, err := strconv.ParseBool(os.Getenv("GO_CAPNP_NEW_STRUCT_DISABLE")); err == nil {
+		enabledStructInfo = enable
 	}
 	if enable, err := strconv.ParseBool(os.Getenv("GO_CAPNP_STRUCT_INFO_ENABLE")); err == nil {
 		enabledStructInfo = enable
